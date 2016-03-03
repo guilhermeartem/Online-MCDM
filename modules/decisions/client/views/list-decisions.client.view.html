@@ -1,0 +1,22 @@
+<section>
+  <div class="page-header">
+    <h1>Decisions</h1>
+  </div>
+  <div class="list-group">
+    <a data-ng-repeat="decision in vm.decisions"
+       data-ui-sref="decisions.view({ decisionId: decision._id })"
+       class="list-group-item">
+      <small class="list-group-item-text">
+        Posted on
+        <span data-ng-bind="decision.created | date:'mediumDate'"></span>
+        by
+        <span data-ng-if="decision.user" data-ng-bind="decision.user.displayName"></span>
+        <span data-ng-if="!decision.user">Deleted User</span>
+      </small>
+      <h4 class="list-group-item-heading" data-ng-bind="decision.name"></h4>
+    </a>
+  </div>
+  <div class="alert alert-warning text-center" data-ng-if="vm.decisions.$resolved && !vm.decisions.length">
+    No Decisions yet, why don't you <a data-ui-sref="decisions.create">create one</a>?
+  </div>
+</section>

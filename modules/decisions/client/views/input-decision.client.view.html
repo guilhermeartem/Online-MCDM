@@ -1,0 +1,58 @@
+<section ng-controller="DecisionsController">
+  <div class="page-header">
+    <h1>Input Matrix</h1>
+  </div>
+  <div class="body">
+    <!--<form ng-controller="DecisionsController">-->
+
+      <div class="form-inline">
+        <div class="form-group">
+          <label for="nLin">Alternatives:</label>
+          <input id="nLin" class="form-control" type='number' max="12" ng-model='nLin'>
+        </div>
+        <div class="form-group">
+          <label for="nCol">Criteria:</label>
+          <input id="nCol" class="form-control" type='number' max="12" ng-model='nCol'>
+        </div>
+        <button class="btn btn-default" ng-click="inputDimension()">Ok</button>
+      </div>
+
+      <div class="form-horizontal">
+        <h2>Alternatives</h2>
+        <div class="form-inline" ng-repeat="alternative in matrix.alternatives">
+          <input type="text" ng-model="alternative.name" placeholder="Alternative Name">
+        </div>
+      </div>
+
+      <div class="form-horizontal">
+        <h2>Criterion</h2>
+        <div class="form-inline" ng-repeat="criterion in matrix.criteria">
+          <input type="text" ng-model="criterion.name" placeholder="Criterion Name">
+          <input type="number" step="any" ng-model="criterion.weight" max="1.0" min="0" placeholder="Criterion Weight">
+          <input type="checkbox" data-ng-model="criterion.benefit">
+        </div>
+      </div>
+
+      <div class="form-horizontal">
+        <h2>Decision Matrix</h2>
+        <div class="form-inline" ng-repeat="line in matrix.evaluation">
+          <div class="row">
+            <input class="col-sm-1" ng-repeat="col in line track by $index"type="number" step="any" ng-model="line[$index]">
+          </div>
+        </div>
+      </div>
+
+      <br>
+
+      <!--<input ng-repeat="field in matrix.fields track by $index" type='text' ng-model='matrix.fields[$index]' placeholder='Field:'>-->
+      <div>
+        <button class="btn btn-default" type='submit' ng-click="submitTable()">Submit</button>
+      </div>
+
+      <br> <br>
+      <pre>{{ matrix | json }}</pre>
+      <br> <br>
+      <pre>{{ res | json }}</pre>
+    <!--</form>-->
+  </div>
+</section>
