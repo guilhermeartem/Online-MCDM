@@ -26,10 +26,19 @@
 
       <div class="form-horizontal">
         <h2>Criterion</h2>
-        <div class="form-inline" ng-repeat="criterion in matrix.criteria">
-          <input type="text" ng-model="criterion.name" placeholder="Criterion Name">
-          <input type="number" step="any" ng-model="criterion.weight" max="1.0" min="0" placeholder="Criterion Weight">
-          <input type="checkbox" data-ng-model="criterion.benefit">
+        <div class="form-inline row">
+          <h4 class="col-md-2">Criterion Name</h4>
+          <h4 class="col-md-2">Criterion Weight</h4>
+          <h4 class="col-md-1">Benefit</h4>
+          <h4 class="col-md-2">Data Type</h4>
+        </div>
+        <div class="form-inline row" ng-repeat="criterion in matrix.criteria">
+          <input class="col-md-2" type="text" ng-model="criterion.name" placeholder="Criterion Name">
+          <input class="col-md-2" type="number" step="any" ng-model="criterion.weight" max="1.0" min="0" placeholder="Criterion Weight">
+          <input class="col-md-1" type="checkbox" data-ng-model="criterion.benefit">
+          <select class="col-md-2" name="type" id="type" ng-model="criterion.type">
+            <option ng-repeat="option in valueOptions" value="{{option.name}}">{{option.showName}}</option>
+          </select>
         </div>
       </div>
 
@@ -37,7 +46,9 @@
         <h2>Decision Matrix</h2>
         <div class="form-inline" ng-repeat="line in matrix.evaluation">
           <div class="row">
-            <input class="col-sm-1" ng-repeat="col in line track by $index"type="number" step="any" ng-model="line[$index]">
+            <!--<input class="col-sm-1" ng-repeat="col in line track by $index"type="number" step="any" ng-model="line[$index]">-->
+            <select class="col-sm-1" ng-options="option.value as option.abbreviation for option in listValues | filter:{ type : matrix.criteria[$index].type}" ng-repeat="col in line track by $index" ng-model="line[$index]">
+            </select>
           </div>
         </div>
       </div>

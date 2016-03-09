@@ -15,6 +15,7 @@ public class JSONRunner {
 		DataEntry[][] DM = new DataEntry[mat.getInt("nAlt")][mat.getInt("nCrit")];
 		double[] CC;
 		
+		
 		for(int i = 0; i < criteria.length(); i++){
 			weights[i] = criteria.getJSONObject(i).getDouble("weight");
 //			System.out.print(weights[i] + " ");
@@ -30,12 +31,19 @@ public class JSONRunner {
 			}
 //			System.out.print(benefit[i] + " ");
 		}
-		
-//		System.out.println("");
-		
+				
 		for(int i = 0; i < mat.getInt("nAlt"); i++){
 			for(int j = 0; j < mat.getInt("nCrit"); j++){
-				DM[i][j] = new Crisp(mat.getJSONArray("evaluation").getJSONArray(i).getDouble(j));
+				if(criteria.getJSONObject(j).getString("type").compareTo("crisp") == 0){
+					DM[i][j] = new Crisp(mat.getJSONArray("evaluation").getJSONArray(i).getJSONArray(j).getDouble(0));
+				} else if(criteria.getJSONObject(j).getString("type").compareTo("interval") == 0){
+					DM[i][j] = new IntervalNumber(mat.getJSONArray("evaluation").getJSONArray(i).getJSONArray(j).getDouble(0), mat.getJSONArray("evaluation").getJSONArray(i).getJSONArray(j).getDouble(1));
+				} else if(criteria.getJSONObject(j).getString("type").compareTo("fuzzy") == 0){
+					DM[i][j] = new TrapezoidalFuzzyNumber(new double[] {mat.getJSONArray("evaluation").getJSONArray(i).getJSONArray(j).getDouble(0),
+							mat.getJSONArray("evaluation").getJSONArray(i).getJSONArray(j).getDouble(1),
+							mat.getJSONArray("evaluation").getJSONArray(i).getJSONArray(j).getDouble(1),
+							mat.getJSONArray("evaluation").getJSONArray(i).getJSONArray(j).getDouble(2)});
+				}
 			}
 		}
 		
@@ -58,6 +66,7 @@ public class JSONRunner {
 		result.put("closeness", closeness);
 		
 		return result.toString();
+		
 		
 	}
 }

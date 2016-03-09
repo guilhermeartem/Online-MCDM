@@ -31,6 +31,7 @@ exports.create = function(req, res) {
     var ret = JSON.parse(str);
 
     res.json(ret);
+    //res.json(matrix);
 
     //  if (err) {
   //    return res.status(400).send({

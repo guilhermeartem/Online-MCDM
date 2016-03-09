@@ -6,9 +6,9 @@
     .module('decisions')
     .controller('DecisionsController', DecisionsController);
 
-  DecisionsController.$inject = ['$scope', '$state', 'Authentication', 'DecisionsService'];
+  DecisionsController.$inject = ['$scope', '$state', 'Authentication', 'DecisionsService','ValuesService'];
 
-  function DecisionsController ($scope, $state, Authentication, DecisionsService) {
+  function DecisionsController ($scope, $state, Authentication, DecisionsService, ValuesService) {
     var vm = this;
 
     vm.authentication = Authentication;
@@ -23,8 +23,20 @@
 
     $scope.matrix = new DecisionsService();
 
+    $scope.listValues = ValuesService.query();
+
+    $scope.valueOptions = [
+      { name: 'crisp', showName: 'Crisp' },
+      { name: 'interval', showName: 'Interval' },
+      { name: 'fuzzy', showName: 'Fuzzy' },
+      { name: 'z-number', showName: 'Z-Number' }
+    ];
+
     $scope.inputDimension = function(){
+
       var i;
+
+      console.log($scope.listValues);
 
       $scope.matrix.nAlt = $scope.nLin;
       $scope.matrix.nCrit = $scope.nCol;
@@ -42,7 +54,7 @@
       }
 
       for(i = 0; i < $scope.matrix.nCrit; i++){
-        $scope.matrix.criteria.push({ name:'',weight:0,benefit:false });
+        $scope.matrix.criteria.push({ name:'',weight:0,benefit:false,type:'' });
       }
 
       for(i=0; i<$scope.matrix.nAlt; i++) {
