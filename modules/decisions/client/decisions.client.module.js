@@ -1,5 +1,5 @@
 (function (app) {
   'use strict';
 
-  app.registerModule('decisions',['values']);
+  app.registerModule('decisions',['values', 'chart.js']);
 })(ApplicationConfiguration);

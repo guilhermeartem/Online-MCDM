@@ -29,7 +29,7 @@ exports.create = function(req, res) {
     var str = jsonInterface.runSync(JSON.stringify(matrix));
 
     var ret = JSON.parse(str);
-
+    // var ret = matrix;
     res.json(ret);
     //res.json(matrix);
 

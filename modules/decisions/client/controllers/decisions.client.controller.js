@@ -47,6 +47,8 @@
       $scope.matrix.criteria = [];
       $scope.matrix.alternatives = [];
       $scope.matrix.evaluation = [];
+      $scope.labels = [];
+      $scope.coefficients = [];
 
 
       for(i = 0; i < $scope.matrix.nAlt; i++){
@@ -68,14 +70,24 @@
 
     $scope.submitTable = function() {
 
+      var i;
+
       console.log($scope.matrix);
       var old = new DecisionsService($scope.matrix);
       $scope.matrix.$save(function (response) {
         $scope.res = response;
+        console.log($scope.res.closeness);
+        for(i = 0; i < $scope.res.closeness.length; i++){
+          console.log($scope.res.closeness[i]);
+          $scope.labels.push($scope.res.closeness[i].name);
+          $scope.coefficients.push($scope.res.closeness[i].coefficient);
+        }
         $scope.matrix = old;
         //console.log($scope.old);
         console.log(response);
-        console.log($scope.matrix);
+        console.log($scope.labels);
+        console.log($scope.coefficients);
+        // console.log($scope.matrix);
       }, function (errorResponse) {
         $scope.error = errorResponse.data.message;
       });
