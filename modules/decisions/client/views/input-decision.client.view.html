@@ -60,9 +60,19 @@
         <button class="btn btn-default" type='submit' ng-click="submitTable()">Submit</button>
       </div>
 
-      <canvas id="bar" class="chart chart-bar"
-              chart-data="coefficients" chart-labels="labels">
-      </canvas>
+      <div ng-repeat="alt in sortRes">
+        <div class="row">
+          <div class="col-md-3">{{alt.name}}</div>
+          <div class="col-md-3">{{alt.coefficient}}</div>
+        </div>
+
+      </div>
+
+      <div>
+        <canvas id="bar" class="chart chart-bar"
+                chart-data="coefficients" chart-labels="labels">
+        </canvas>
+      </div>
 
       <br> <br>
       <pre>{{ matrix | json }}</pre>
