@@ -18,9 +18,6 @@
     //vm.remove = remove;
     //vm.save = save;
 
-    $scope.labels = [];
-    $scope.coefficients = [[]];
-
     $scope.nCol = 0;
     $scope.nLin = 0;
 
@@ -50,6 +47,8 @@
       $scope.matrix.criteria = [];
       $scope.matrix.alternatives = [];
       $scope.matrix.evaluation = [];
+      $scope.labels = [];
+      $scope.coefficients = [[]];
 
 
       for(i = 0; i < $scope.matrix.nAlt; i++){
