@@ -22,5 +22,20 @@
       <span data-ng-if="!value.user">Deleted User</span>
     </em>
   </small>
-  <p class="lead" data-ng-bind="value.content"></p>
+
+  <p class="lead">
+    Value Type: {{value.type}}
+  </p>
+
+  <p class="lead" ng-show="value.type == 'crisp'">
+    Values = {{value.value[0]}}
+  </p>
+
+  <p class="lead" ng-show="value.type == 'interval'">
+    Values = [{{value.value[0]}}, {{value.value[1]}}]
+  </p>
+
+  <p class="lead" ng-show="value.type == 'fuzzy'">
+    Values = ({{value.value[0]}}, {{value.value[1]}}, {{value.value[2]}})
+  </p>
 </section>

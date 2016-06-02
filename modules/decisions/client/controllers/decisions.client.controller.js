@@ -48,7 +48,7 @@
       $scope.matrix.alternatives = [];
       $scope.matrix.evaluation = [];
       $scope.labels = [];
-      $scope.coefficients = [];
+      $scope.coefficients = [[]];
 
 
       for(i = 0; i < $scope.matrix.nAlt; i++){
@@ -80,7 +80,7 @@
         for(i = 0; i < $scope.res.closeness.length; i++){
           console.log($scope.res.closeness[i]);
           $scope.labels.push($scope.res.closeness[i].name);
-          $scope.coefficients.push($scope.res.closeness[i].coefficient);
+          $scope.coefficients[0].push($scope.res.closeness[i].coefficient);
         }
         $scope.matrix = old;
         //console.log($scope.old);
