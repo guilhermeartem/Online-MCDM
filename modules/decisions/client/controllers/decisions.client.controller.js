@@ -18,6 +18,9 @@
     //vm.remove = remove;
     //vm.save = save;
 
+    $scope.labels = [];
+    $scope.coefficients = [[]];
+
     $scope.nCol = 0;
     $scope.nLin = 0;
 
@@ -47,8 +50,6 @@
       $scope.matrix.criteria = [];
       $scope.matrix.alternatives = [];
       $scope.matrix.evaluation = [];
-      $scope.labels = [];
-      $scope.coefficients = [];
 
 
       for(i = 0; i < $scope.matrix.nAlt; i++){
@@ -76,11 +77,16 @@
       var old = new DecisionsService($scope.matrix);
       $scope.matrix.$save(function (response) {
         $scope.res = response;
+        $scope.sortRes = $scope.res.closeness.sort(
+            function(a, b) {
+              return a.coefficient - b.coefficient;
+            }
+        );
         console.log($scope.res.closeness);
         for(i = 0; i < $scope.res.closeness.length; i++){
           console.log($scope.res.closeness[i]);
           $scope.labels.push($scope.res.closeness[i].name);
-          $scope.coefficients.push($scope.res.closeness[i].coefficient);
+          $scope.coefficients[0].push($scope.res.closeness[i].coefficient);
         }
         $scope.matrix = old;
         //console.log($scope.old);
