@@ -39,4 +39,11 @@
     Values = ({{value.value[0]}}, {{value.value[1]}}, {{value.value[2]}})
     <c3chart bindto-id="dynamicline" chart-data="linePoints" chart-columns="lineColumns" chart-x="datax"/>
   </p>
+
+  <p class="lead" ng-show="value.type == 'z-number'">
+    Values = (({{value.value[0]}}, {{value.value[1]}}, {{value.value[2]}}),({{value.value[3]}}, {{value.value[4]}}, {{value.value[5]}}))
+    <c3chart bindto-id="dynamiclinez" chart-data="linePoints" chart-columns="lineColumns" chart-x="datax"/>
+    <c3chart bindto-id="zGraph" chart-data="linePointsZ" chart-columns="lineColumnsZ" chart-x="datax"/>
+  </p>
+
 </section>
