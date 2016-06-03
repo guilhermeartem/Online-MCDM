@@ -76,7 +76,8 @@
       var old = new DecisionsService($scope.matrix);
       $scope.matrix.$save(function (response) {
         $scope.res = response;
-        $scope.sortRes = $scope.res.closeness.sort(
+        $scope.sortRes = $scope.res.closeness;
+        $scope.sortRes.sort(
             function(a, b) {
               return a.coefficient - b.coefficient;
             }
