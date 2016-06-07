@@ -7,7 +7,7 @@ package DataType;
  * a_1, a_2, a_3, a_4, a_1, a_2, a_3 e a_4. These parameters define the two membership function.
  */
 
-public class TrapezoidalZNumber {
+public class TrapezoidalZNumber{
 
 	/***
 	 * The parameters array of the TZN.
@@ -55,7 +55,12 @@ public class TrapezoidalZNumber {
             throw new IllegalArgumentException("The parameters must satisfy a[1]<=a[2]<=a[3]<=a[4] and b[1]<=b[2]<b[3]<=b[4]");
     }
     
-    TrapezoidalFuzzyNumber ConvertToFuzzy(){
+    /***
+     * This Function converts the Z-Number to a Fuzzy Number
+     * @return fuzzy equivalent value
+     */
+    
+    public TrapezoidalFuzzyNumber ConvertToFuzzy(){
     	TrapezoidalFuzzyNumber fuzzy;
     	double alpha, sqrtAlpha;
     	

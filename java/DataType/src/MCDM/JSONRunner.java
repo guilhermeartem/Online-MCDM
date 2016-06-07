@@ -43,6 +43,15 @@ public class JSONRunner {
 							mat.getJSONArray("evaluation").getJSONArray(i).getJSONArray(j).getDouble(1),
 							mat.getJSONArray("evaluation").getJSONArray(i).getJSONArray(j).getDouble(1),
 							mat.getJSONArray("evaluation").getJSONArray(i).getJSONArray(j).getDouble(2)});
+				} else if(criteria.getJSONObject(j).getString("type").compareTo("z-number") == 0){
+					DM[i][j] = (new TrapezoidalZNumber(new double[] {mat.getJSONArray("evaluation").getJSONArray(i).getJSONArray(j).getDouble(0),
+							mat.getJSONArray("evaluation").getJSONArray(i).getJSONArray(j).getDouble(1),
+							mat.getJSONArray("evaluation").getJSONArray(i).getJSONArray(j).getDouble(1),
+							mat.getJSONArray("evaluation").getJSONArray(i).getJSONArray(j).getDouble(2)},
+							new double[] {mat.getJSONArray("evaluation").getJSONArray(i).getJSONArray(j).getDouble(3),
+							mat.getJSONArray("evaluation").getJSONArray(i).getJSONArray(j).getDouble(4),
+							mat.getJSONArray("evaluation").getJSONArray(i).getJSONArray(j).getDouble(4),
+							mat.getJSONArray("evaluation").getJSONArray(i).getJSONArray(j).getDouble(5)})).ConvertToFuzzy();
 				}
 			}
 		}

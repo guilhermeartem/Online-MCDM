@@ -83,6 +83,8 @@
             }
         );
         console.log($scope.res.closeness);
+        $scope.labels = [];
+        $scope.coefficients = [[]];
         for(i = 0; i < $scope.res.closeness.length; i++){
           console.log($scope.res.closeness[i]);
           $scope.labels.push($scope.res.closeness[i].name);
