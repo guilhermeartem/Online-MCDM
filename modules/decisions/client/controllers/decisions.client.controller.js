@@ -22,8 +22,14 @@
     $scope.nLin = 0;
 
     $scope.matrix = new DecisionsService();
+    $scope.matrix.theta = 1;
 
     $scope.listValues = ValuesService.query();
+
+    $scope.methodOptions = {
+      topsis: true,
+      todim: true
+    };
 
     $scope.valueOptions = [
       { name: 'crisp', showName: 'Crisp' },
@@ -41,6 +47,9 @@
       $scope.matrix.nAlt = $scope.nLin;
       $scope.matrix.nCrit = $scope.nCol;
 
+
+      $scope.matrix.methodOptions = $scope.methodOptions;
+
       console.log($scope.matrix.nAlt);
       console.log($scope.matrix.nCrit);
 
@@ -48,7 +57,8 @@
       $scope.matrix.alternatives = [];
       $scope.matrix.evaluation = [];
       $scope.labels = [];
-      $scope.coefficients = [[]];
+      $scope.coefficients = [[],[]];
+      $scope.series = ['TOPSIS','TODIM'];
 
 
       for(i = 0; i < $scope.matrix.nAlt; i++){
@@ -76,19 +86,23 @@
       var old = new DecisionsService($scope.matrix);
       $scope.matrix.$save(function (response) {
         $scope.res = response;
-        $scope.sortRes = $scope.res.closeness;
-        $scope.sortRes.sort(
-            function(a, b) {
-              return a.coefficient - b.coefficient;
-            }
-        );
-        console.log($scope.res.closeness);
+        // $scope.sortRes = $scope.res.closeness;
+        // $scope.sortRes.sort(
+        //     function(a, b) {
+        //       return a.coefficient - b.coefficient;
+        //     }
+        // );
+        console.log('aki');
         $scope.labels = [];
-        $scope.coefficients = [[]];
-        for(i = 0; i < $scope.res.closeness.length; i++){
-          console.log($scope.res.closeness[i]);
-          $scope.labels.push($scope.res.closeness[i].name);
-          $scope.coefficients[0].push($scope.res.closeness[i].coefficient);
+        $scope.coefficients = [[],[]];
+        for(i = 0; i < $scope.res.closenessTopsis.length; i++){
+          console.log($scope.res.closenessTopsis[i]);
+          $scope.labels.push($scope.res.closenessTopsis[i].name);
+          $scope.coefficients[0].push($scope.res.closenessTopsis[i].coefficient);
+        }
+        for(i = 0; i < $scope.res.closenessTodim.length; i++){
+          console.log($scope.res.closenessTodim[i]);
+          $scope.coefficients[1].push($scope.res.closenessTodim[i].coefficient);
         }
         $scope.matrix = old;
         //console.log($scope.old);

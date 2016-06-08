@@ -8,13 +8,16 @@ public class JSONRunner {
 	public static String run(String strJSON){
 		JSONObject mat = new JSONObject(strJSON);
 		JSONObject result = new JSONObject();
-		JSONArray closeness = new JSONArray();
+		JSONArray closenessTopsis = new JSONArray();
+		JSONArray closenessTodim = new JSONArray();
 		JSONArray criteria = mat.getJSONArray("criteria");
 		double[] weights = new double[criteria.length()];
 		int[] benefit = new int[criteria.length()];
 		DataEntry[][] DM = new DataEntry[mat.getInt("nAlt")][mat.getInt("nCrit")];
-		double[] CC;
+		double[] CCTopsis, CCTodim;
+		double theta = mat.getDouble("theta");
 		
+		result.put("methodOptions", mat.getJSONObject("methodOptions"));
 		
 		for(int i = 0; i < criteria.length(); i++){
 			weights[i] = criteria.getJSONObject(i).getDouble("weight");
@@ -64,18 +67,34 @@ public class JSONRunner {
 //	    System.out.printf("\n\n"); 
 	    
 	    DataEntry.Normalize(DM, false);
+	    
+	    if(mat.getJSONObject("methodOptions").getBoolean("topsis")){
+	    	
+	    	CCTopsis = TOPSIS.Modular(DM,weights,benefit,false);
+			
+			for(int i = 0; i < mat.getInt("nAlt"); i++){
+				closenessTopsis.put(new JSONObject().put("name", mat.getJSONArray("alternatives").getJSONObject(i).getString("name")).
+						put("coefficient", CCTopsis[i]));
+			}
+			
+			result.put("closenessTopsis", closenessTopsis);
+	    	
+	    }
+	    
+	    if(mat.getJSONObject("methodOptions").getBoolean("todim")){
+	    	
+	    	CCTodim = TODIM.Modular(DM,weights,theta, benefit,false);
+			
+			for(int i = 0; i < mat.getInt("nAlt"); i++){
+				closenessTodim.put(new JSONObject().put("name", mat.getJSONArray("alternatives").getJSONObject(i).getString("name")).
+						put("coefficient", CCTodim[i]));
+			}
+			
+			result.put("closenessTodim", closenessTodim);
+	    	
+	    }
 		
-		CC = TOPSIS.Modular(DM,weights,benefit,false);
-		
-		for(int i = 0; i < mat.getInt("nAlt"); i++){
-			closeness.put(new JSONObject().put("name", mat.getJSONArray("alternatives").getJSONObject(i).getString("name")).
-					put("coefficient", CC[i]));
-		}
-		
-		result.put("closeness", closeness);
-		
-		return result.toString();
-		
+		return result.toString();		
 		
 	}
 }
