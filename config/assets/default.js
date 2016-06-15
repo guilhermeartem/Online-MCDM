@@ -9,7 +9,7 @@ module.exports = {
         'public/lib/angular-material/angular-material.css',
         'public/lib/angular-chart.js/dist/angular-chart.css',
         'public/lib/c3/c3.css',
-        'public/lib/angular-multi-slider/multislider.css'
+        'public/angular-multi-slider/multislider.css'
       ],
       js: [
         'public/lib/angular/angular.js',
@@ -28,7 +28,7 @@ module.exports = {
         'public/lib/d3/d3.js',
         'public/lib/c3/c3.js',
         'public/lib/c3-angular/c3-angular.min.js',
-        'public/lib/angular-multi-slider/multislider.js'
+        'public/angular-multi-slider/multislider.js'
       ],
       tests: ['public/lib/angular-mocks/angular-mocks.js']
     },
