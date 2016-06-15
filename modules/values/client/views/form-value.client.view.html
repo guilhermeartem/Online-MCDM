@@ -1,7 +1,8 @@
-<section>
+<section data-ng-init="initf()">
   <div class="page-header">
     <h1>{{value._id ? 'Edit Value' : 'New Value'}}</h1>
   </div>
+
   <div class="col-md-12">
     <form name="vm.form.valueForm" class="form-horizontal" ng-submit="vm.save(vm.form.valueForm.$valid)" novalidate>
       <fieldset>
@@ -71,47 +72,47 @@
             <p class="help-block error-text" ng-message="required">Value values are required.</p>
           </div>
         </div>
-        <div class="form-group" show-errors ng-show="value.type == 'fuzzy'">
+        <div class="form-group"  ng-show="value.type == 'fuzzy'">
           <label class="control-label">Input Fuzzy-Values</label>
-          <md-content>
-            <div layout="">
-              <div flex="10" layout="" layout-align="center center">
-                <span class="md-body-1">Left Value</span>
-              </div>
-              <md-slider name="fuzzy-slider-left" aria-label="fuzzy-slider-left" ng-model="value.value[0]" id="fuzzy-slider-left" min="0" max="1" step="0.01" class="md-primary md-hue-1" flex ="" ng-click="testButton()">
-              </md-slider>
-              <div flex="20" layout="" layout-align="center center" class="text-center">
-                <input flex="" type="number" ng-model="value.value[0]" aria-label="fuzzy-slider-left" aria-controls="fuzzy-slider-left" style="text-align:center;">
-              </div>
-            </div>
-            <div layout="">
-              <div flex="10" layout="" layout-align="center center">
-                <span class="md-body-1">Center Value</span>
-              </div>
-              <md-slider name="fuzzy-slider-center" aria-label="fuzzy-slider-center" ng-model="value.value[1]" id="fuzzy-slider-center" min="0" max="1" step="0.01" class="md-primary" flex ="" ng-click="testButton()">
-              </md-slider>
-              <div flex="20" layout="" layout-align="center center" class="text-center">
-                <input flex="" type="number" ng-model="value.value[1]" aria-label="fuzzy-slider-center" aria-controls="fuzzy-slider-center" style="text-align:center;">
-              </div>
-            </div>
-            <div layout="">
-              <div flex="10" layout="" layout-align="center center">
-                <span class="md-body-1">Right Value</span>
-              </div>
-              <md-slider name="fuzzy-slider-right" aria-label="fuzzy-slider-right" ng-model="value.value[2]" id="fuzzy-slider-right" min="0" max="1" step="0.01" class="md-primary md-hue-2" flex ="" ng-click="testButton()">
-              </md-slider>
-              <div flex="20" layout="" layout-align="center center" class="text-center">
-                <input flex="" type="number" ng-model="value.value[2]" aria-label="fuzzy-slider-right" aria-controls="fuzzy-slider-right" style="text-align:center;">
-              </div>
-            </div>
+          <!--<md-content>-->
+            <!--<div layout="">-->
+              <!--<div flex="10" layout="" layout-align="center center">-->
+                <!--<span class="md-body-1">Left Value</span>-->
+              <!--</div>-->
+              <!--<md-slider name="fuzzy-slider-left" aria-label="fuzzy-slider-left" ng-model="value.value[0]" id="fuzzy-slider-left" min="0" max="1" step="0.01" class="md-primary md-hue-1" flex ="" ng-click="testButton()">-->
+              <!--</md-slider>-->
+              <!--<div flex="20" layout="" layout-align="center center" class="text-center">-->
+                <!--<input flex="" type="number" ng-model="value.value[0]" aria-label="fuzzy-slider-left" aria-controls="fuzzy-slider-left" style="text-align:center;">-->
+              <!--</div>-->
+            <!--</div>-->
+            <!--<div layout="">-->
+              <!--<div flex="10" layout="" layout-align="center center">-->
+                <!--<span class="md-body-1">Center Value</span>-->
+              <!--</div>-->
+              <!--<md-slider name="fuzzy-slider-center" aria-label="fuzzy-slider-center" ng-model="value.value[1]" id="fuzzy-slider-center" min="0" max="1" step="0.01" class="md-primary" flex ="" ng-click="testButton()">-->
+              <!--</md-slider>-->
+              <!--<div flex="20" layout="" layout-align="center center" class="text-center">-->
+                <!--<input flex="" type="number" ng-model="value.value[1]" aria-label="fuzzy-slider-center" aria-controls="fuzzy-slider-center" style="text-align:center;">-->
+              <!--</div>-->
+            <!--</div>-->
+            <!--<div layout="">-->
+              <!--<div flex="10" layout="" layout-align="center center">-->
+                <!--<span class="md-body-1">Right Value</span>-->
+              <!--</div>-->
+              <!--<md-slider name="fuzzy-slider-right" aria-label="fuzzy-slider-right" ng-model="value.value[2]" id="fuzzy-slider-right" min="0" max="1" step="0.01" class="md-primary md-hue-2" flex ="" ng-click="testButton()">-->
+              <!--</md-slider>-->
+              <!--<div flex="20" layout="" layout-align="center center" class="text-center">-->
+                <!--<input flex="" type="number" ng-model="value.value[2]" aria-label="fuzzy-slider-right" aria-controls="fuzzy-slider-right" style="text-align:center;">-->
+              <!--</div>-->
+            <!--</div>-->
 
-            <!--<canvas id="line" class="chart chart-line" chart-data="data" chart-labels="labels" chart-legend="true" chart-series="series" chart-click="onClick" >-->
-            <!--</canvas>-->
-          </md-content>
+            <!--&lt;!&ndash;<canvas id="line" class="chart chart-line" chart-data="data" chart-labels="labels" chart-legend="true" chart-series="series" chart-click="onClick" >&ndash;&gt;-->
+            <!--&lt;!&ndash;</canvas>&ndash;&gt;-->
+          <!--</md-content>-->
 
-          <div ng-messages="vm.form.valueForm.value.$error" role="alert">
-            <p class="help-block error-text" ng-message="required">Value values are required.</p>
-          </div>
+          <!--<div ng-messages="vm.form.valueForm.value.$error" role="alert">-->
+            <!--<p class="help-block error-text" ng-message="required">Value values are required.</p>-->
+          <!--</div>-->
         </div>
 
         <div class="form-group" show-errors ng-show="value.type == 'z-number'">
@@ -188,14 +189,26 @@
           </div>
         </div>
 
-        <c3chart ng-show="value.type == 'z-number' || value.type == 'fuzzy'" bindto-id="fuzzyGraph" chart-data="linePoints" chart-columns="lineColumns" chart-x="datax"/>
-
-        <c3chart ng-show="value.type == 'z-number'" bindto-id="zGraph" chart-data="linePointsZ" chart-columns="lineColumnsZ" chart-x="datax"/>
-
+        <multi-slider name="fuzzySlider"
+                      floor="0"
+                      step="0.01"
+                      ceiling="1"
+                      bubbles="true"
+                      ng-model="vm.fuzzySlider"
+                      style="margin-top:120px"
+                      control="tstCtrl"
+                      ng-show="value.type == 'fuzzy'"
+                      ng-click="clickFuzzySlider()">
+        </multi-slider>
 
         <div class="form-group">
           <button type="submit" class="btn btn-default">{{value._id ? 'Update' : 'Create'}}</button>
         </div>
+
+        <c3chart ng-show="value.type == 'z-number' || value.type == 'fuzzy'" bindto-id="fuzzyGraph" chart-data="linePoints" chart-columns="lineColumns" chart-x="datax"/>
+        <c3chart ng-show="value.type == 'z-number'" bindto-id="zGraph" chart-data="linePointsZ" chart-columns="lineColumnsZ" chart-x="datax"/>
+
+
 
         <div ng-show="vm.error" class="text-danger">
           <strong ng-bind="vm.error"></strong>

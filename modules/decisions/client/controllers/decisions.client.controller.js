@@ -57,8 +57,8 @@
       $scope.matrix.alternatives = [];
       $scope.matrix.evaluation = [];
       $scope.labels = [];
-      $scope.coefficients = [[],[]];
-      $scope.series = ['TOPSIS','TODIM'];
+      $scope.coefficients = [];
+      $scope.series = [];
 
 
       for(i = 0; i < $scope.matrix.nAlt; i++){
@@ -94,15 +94,26 @@
         // );
         console.log('aki');
         $scope.labels = [];
-        $scope.coefficients = [[],[]];
-        for(i = 0; i < $scope.res.closenessTopsis.length; i++){
-          console.log($scope.res.closenessTopsis[i]);
-          $scope.labels.push($scope.res.closenessTopsis[i].name);
-          $scope.coefficients[0].push($scope.res.closenessTopsis[i].coefficient);
+        $scope.series = [];
+        $scope.coefficients = [];
+        if($scope.res.methodOptions.topsis){
+          $scope.series.push('TOPSIS');
+          $scope.coefficients.push([]);
+          for(i = 0; i < $scope.res.closenessTopsis.length; i++){
+            console.log($scope.res.closenessTopsis[i]);
+            $scope.labels.push($scope.res.closenessTopsis[i].name);
+            $scope.coefficients[0].push($scope.res.closenessTopsis[i].coefficient);
+          }
         }
-        for(i = 0; i < $scope.res.closenessTodim.length; i++){
-          console.log($scope.res.closenessTodim[i]);
-          $scope.coefficients[1].push($scope.res.closenessTodim[i].coefficient);
+        if($scope.res.methodOptions.todim){
+          $scope.series.push('TODIM');
+          $scope.coefficients.push([]);
+          $scope.labels = [];
+          for(i = 0; i < $scope.res.closenessTodim.length; i++){
+            console.log($scope.res.closenessTodim[i]);
+            $scope.labels.push($scope.res.closenessTodim[i].name);
+            $scope.coefficients[$scope.coefficients.length - 1].push($scope.res.closenessTodim[i].coefficient);
+          }
         }
         $scope.matrix = old;
         //console.log($scope.old);

@@ -14,12 +14,21 @@
     vm.authentication = Authentication;
     $scope.value = value;
     if(!$scope.value._id){
-      $scope.value.value = [];
+      $scope.value.value = [0,0,0,0,0,0];
     }
+    $scope.tstCtrl = {};
+
+    vm.fuzzySlider = [
+      {value: $scope.value.value[0], title: 'Left Value = ', component: 'Left'},
+      {value: $scope.value.value[1], title: 'Center Value = ', component: 'Center'},
+      {value: $scope.value.value[2], title: 'Right Value = ', component: 'Right'}
+    ];
+
     vm.error = null;
     vm.form = {};
     vm.remove = remove;
     vm.save = save;
+
     vm.valueOptions = [
       { name: 'crisp', showName: 'Crisp' },
       { name: 'interval', showName: 'Interval' },
@@ -29,11 +38,13 @@
 
     // $scope.linePoints = [{"x":0,"data1":30, "data2":50},{"x":1,"data1":200, "data2":20},{"x":2,"data1":100, "data2":10},{"x":3,"data1":400, "data2":40}, {"x":4,"data1":150, "data2":15}, {"x":5,"data1":250, "data2":25}];
     // $scope.lineColumns = [{"id": "data1", "type": "spline"}, {"id": "data2", "type": "line"}];
-
     $scope.linePoints = [{"x":0,"data1":0}, {"x":$scope.value.value[0],"data1":0},{"x":$scope.value.value[1],"data1":1},{"x":$scope.value.value[2],"data1":0}, {"x":1,"data1":0}];
     $scope.lineColumns = [{"id": "data1", "type": "line"}];
     $scope.linePointsZ = [{"x":0,"data1":0}, {"x":$scope.value.value[3],"data1":0},{"x":$scope.value.value[4],"data1":1},{"x":$scope.value.value[5],"data1":0}, {"x":1,"data1":0}];
     $scope.lineColumnsZ = [{"id": "data1", "type": "line"}];
+
+
+
     $scope.datax = {"id": "x"};
 
     // Remove existing Value
@@ -42,6 +53,27 @@
         $scope.value.$remove($state.go('values.list'));
       }
     }
+
+    $scope.clickFuzzySlider = function(){
+      var aux = [vm.fuzzySlider[0].value, vm.fuzzySlider[1].value, vm.fuzzySlider[2].value];
+      aux.sort();
+      vm.fuzzySlider[0].value = aux[0];
+      vm.fuzzySlider[1].value = aux[1];
+      vm.fuzzySlider[2].value = aux[2];
+      $scope.value.value[0] = vm.fuzzySlider[0].value;
+      $scope.value.value[1] = vm.fuzzySlider[1].value;
+      $scope.value.value[2] = vm.fuzzySlider[2].value;
+      $scope.tstCtrl.updateSlider();
+      $scope.linePoints = [{"x":0,"data1":0}, {"x":$scope.value.value[0],"data1":0},{"x":$scope.value.value[1],"data1":1},{"x":$scope.value.value[2],"data1":0}, {"x":1,"data1":0}];
+    };
+
+    $scope.initf = function () {
+      vm.fuzzySlider = [
+        {value: $scope.value.value[0], title: 'Left Value = ', component: 'Left'},
+        {value: $scope.value.value[1], title: 'Center Value = ', component: 'Center'},
+        {value: $scope.value.value[2], title: 'Right Value = ', component: 'Right'}
+      ];
+    };
 
     $scope.testButton = function(){
       // console.log($scope.value.value);
