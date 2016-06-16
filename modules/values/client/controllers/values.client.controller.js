@@ -16,9 +16,28 @@
     if(!$scope.value._id){
       $scope.value.value = [0,0,0,0,0,0];
     }
-    $scope.tstCtrl = {};
 
+    $scope.ctrlCrispSlider = {};
+    $scope.ctrlIntervalSlider = {};
+    $scope.ctrlFuzzySlider = {};
+    $scope.ctrlZrelSlider = {};
+
+    vm.crispSlider = [
+      {value: $scope.value.value[0], title: 'Value = ', component: 'value'}
+    ];
+
+    vm.intervalSlider = [
+      {value: $scope.value.value[0], title: 'Left Value = ', component: 'Left'},
+      {value: $scope.value.value[1], title: 'Right Value = ', component: 'Right'}
+    ];
+    
     vm.fuzzySlider = [
+      {value: $scope.value.value[0], title: 'Left Value = ', component: 'Left'},
+      {value: $scope.value.value[1], title: 'Center Value = ', component: 'Center'},
+      {value: $scope.value.value[2], title: 'Right Value = ', component: 'Right'}
+    ];
+
+    vm.ZrelSlider= [
       {value: $scope.value.value[0], title: 'Left Value = ', component: 'Left'},
       {value: $scope.value.value[1], title: 'Center Value = ', component: 'Center'},
       {value: $scope.value.value[2], title: 'Right Value = ', component: 'Right'}
@@ -54,6 +73,21 @@
       }
     }
 
+    $scope.clickCrispSlider = function(){
+      $scope.value.value[0] = vm.crispSlider[0].value;
+      $scope.ctrlIntervalSlider.updateSlider();
+    };
+
+    $scope.clickIntervalSlider = function(){
+      var aux = [vm.intervalSlider[0].value, vm.intervalSlider[1].value];
+      aux.sort();
+      vm.intervalSlider[0].value = aux[0];
+      vm.intervalSlider[1].value = aux[1];
+      $scope.value.value[0] = vm.intervalSlider[0].value;
+      $scope.value.value[1] = vm.intervalSlider[1].value;
+      $scope.ctrlIntervalSlider.updateSlider();
+    };
+
     $scope.clickFuzzySlider = function(){
       var aux = [vm.fuzzySlider[0].value, vm.fuzzySlider[1].value, vm.fuzzySlider[2].value];
       aux.sort();
@@ -63,8 +97,21 @@
       $scope.value.value[0] = vm.fuzzySlider[0].value;
       $scope.value.value[1] = vm.fuzzySlider[1].value;
       $scope.value.value[2] = vm.fuzzySlider[2].value;
-      $scope.tstCtrl.updateSlider();
+      $scope.ctrlFuzzySlider.updateSlider();
       $scope.linePoints = [{"x":0,"data1":0}, {"x":$scope.value.value[0],"data1":0},{"x":$scope.value.value[1],"data1":1},{"x":$scope.value.value[2],"data1":0}, {"x":1,"data1":0}];
+    };
+
+    $scope.clickZrelSlider = function(){
+      var aux = [vm.ZrelSlider[0].value, vm.ZrelSlider[1].value, vm.ZrelSlider[2].value];
+      aux.sort();
+      vm.ZrelSlider[0].value = aux[0];
+      vm.ZrelSlider[1].value = aux[1];
+      vm.ZrelSlider[2].value = aux[2];
+      $scope.value.value[3] = vm.ZrelSlider[0].value;
+      $scope.value.value[4] = vm.ZrelSlider[1].value;
+      $scope.value.value[5] = vm.ZrelSlider[2].value;
+      $scope.ctrlZrelSlider.updateSlider();
+      $scope.linePointsZ = [{"x":0,"data1":0}, {"x":$scope.value.value[3],"data1":0},{"x":$scope.value.value[4],"data1":1},{"x":$scope.value.value[5],"data1":0}, {"x":1,"data1":0}];
     };
 
     $scope.initf = function () {

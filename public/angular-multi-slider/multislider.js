@@ -86,7 +86,9 @@ angular.module('angularMultiSlider', [])
         bubbles: '@',
         displayFilter: '@',
         sliders: '=ngModel',
-        control: '='
+        control: '=',
+        ngHide: '=?',
+        ngShow: '=?'
       },
       template :
       '<div class="bar"></div>',
@@ -175,6 +177,13 @@ angular.module('angularMultiSlider', [])
         };
 
         var updateDOM = function () {
+          if(angular.isDefined(attrs.ngHide) && scope.ngHide == true) {
+            return;
+          }
+
+          if(angular.isDefined(attrs.ngShow) && scope.ngShow == false) {
+            return;
+          }
 
           updateCalculations();
 
@@ -337,7 +346,7 @@ angular.module('angularMultiSlider', [])
               bubbleHeight = bubbleHeight === undefined ? bubbles[0][0].offsetHeight + 7 : bubbleHeight ; //add 7px bottom margin to the bubble offset for handle
 
               resetBubbles();
-            }, 3000);
+            }, 10);
           }
           setHandles();
           resetBubbles();
@@ -353,6 +362,20 @@ angular.module('angularMultiSlider', [])
           bindingsSet = false;
           updateDOM();
         });
+        // Watch if ng-Hide is utilized
+        if (angular.isDefined(attrs.ngHide)) {
+          scope.$watch('ngHide', function () {
+            bindingsSet = false;
+            updateDOM();
+          });
+        }
+        // Watch if ng-show is utilized
+        if (angular.isDefined(attrs.ngShow)) {
+          scope.$watch('ngShow', function () {
+            bindingsSet = false;
+            updateDOM();
+          });
+        }
         // Update on Window resize
         window.addEventListener('resize', updateDOM);
       }
