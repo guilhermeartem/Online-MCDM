@@ -26,9 +26,11 @@
 
     $scope.listValues = ValuesService.query();
 
-    $scope.methodOptions = {
-      topsis: true,
-      todim: true
+    $scope.matrix.methodOptions = [];
+
+    $scope.methodInput = {
+      method: "",
+      theta: 1
     };
 
     $scope.valueOptions = [
@@ -46,9 +48,6 @@
 
       $scope.matrix.nAlt = $scope.nLin;
       $scope.matrix.nCrit = $scope.nCol;
-
-
-      $scope.matrix.methodOptions = $scope.methodOptions;
 
       console.log($scope.matrix.nAlt);
       console.log($scope.matrix.nCrit);
@@ -76,6 +75,16 @@
         }
       }
 
+    };
+
+    $scope.inputMethod = function () {
+      if($scope.methodInput.method !== ''){
+        console.log($scope.methodInput);
+        var aux = {};
+        aux.method = $scope.methodInput.method;
+        aux.theta = $scope.methodInput.theta;
+        $scope.matrix.methodOptions.push(aux);
+      }
     };
 
     $scope.submitTable = function() {

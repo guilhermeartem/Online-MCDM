@@ -5,22 +5,39 @@
   <div class="body">
     <!--<form ng-controller="DecisionsController">-->
 
+    <div class="form-inline">
+      <div class="form-group">
+        <label for="nLin">Alternatives:</label>
+        <input id="nLin" class="form-control" type='number' max="12" ng-model='nLin'>
+      </div>
+      <div class="form-group">
+        <label for="nCol">Criteria:</label>
+        <input id="nCol" class="form-control" type='number' max="12" ng-model='nCol'>
+      </div>
+      <button class="btn btn-default" ng-click="inputDimension()">Ok</button>
+    </div>
+
+    <br>
+
+    <div class="form-group">
+      <h2>Methods:</h2>
+      <h3>Add Method:</h3>
       <div class="form-inline">
         <div class="form-group">
-          <label for="nLin">Alternatives:</label>
-          <input id="nLin" class="form-control" type='number' max="12" ng-model='nLin'>
+          <label for="method">Method:</label>
+          <select id="method" ng-model="methodInput.method">
+            <option value="todim">TODIM</option>
+            <option value="topsis">TOPSIS</option>
+          </select>
         </div>
-        <div class="form-group">
-          <label for="nCol">Criteria:</label>
-          <input id="nCol" class="form-control" type='number' max="12" ng-model='nCol'>
+        <div class="form-group" ng-show="methodInput.method == 'todim'">
+          <label for="theta">Theta:</label>
+          <input id="theta" class="form-control" type='number' min="0.1" max="10" step="0.1" ng-model='methodInput.theta'>
         </div>
-        <div class="form-group">
-          <label >Method:</label>
-          <label class="h4"><input type="checkbox" class="form-control"  ng-model="methodOptions.topsis"> TOPSIS </label>
-          <label class="h4"><input type="checkbox" class="form-control"  ng-model="methodOptions.todim"> TODIM </label>
-        </div>
-        <button class="btn btn-default" ng-click="inputDimension()">Ok</button>
+        <button class="btn btn-default" ng-click="inputMethod()">Ok</button>
       </div>
+    </div>
+
 
       <div class="form-horizontal">
         <h2>Alternatives</h2>
@@ -45,11 +62,6 @@
             <option ng-repeat="option in valueOptions" value="{{option.name}}">{{option.showName}}</option>
           </select>
         </div>
-
-        <div class="form-inline row">
-          <label for="theta">Theta:</label>
-          <input id="theta" class="form-control" type='number' min="0.1" max="10" step="0.1" ng-model='matrix.theta'>
-        </div>
       </div>
 
       <div class="form-horizontal">
@@ -64,6 +76,18 @@
       </div>
 
       <br>
+
+    <div class="form-horizontal">
+      <h2>Tunning Matrix</h2>
+      <div class="form-inline" ng-repeat="line in matrix.evaluation">
+        <div class="row">
+          <button class="btn btn-default col-sm-1" ng-repeat="col in line track by $index" ng-model="line[$index]">{{line[$index]}}
+          </button>
+        </div>
+      </div>
+    </div>
+
+
 
       <!--<input ng-repeat="field in matrix.fields track by $index" type='text' ng-model='matrix.fields[$index]' placeholder='Field:'>-->
       <div>
