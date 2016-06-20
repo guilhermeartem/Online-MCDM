@@ -6,9 +6,9 @@
     .module('decisions')
     .controller('DecisionsController', DecisionsController);
 
-  DecisionsController.$inject = ['$scope', '$state', 'Authentication', 'DecisionsService','ValuesService'];
+  DecisionsController.$inject = ['$scope', '$state', '$uibModal','Authentication', 'DecisionsService','ValuesService'];
 
-  function DecisionsController ($scope, $state, Authentication, DecisionsService, ValuesService) {
+  function DecisionsController ($scope, $state, $uibModal, Authentication, DecisionsService, ValuesService) {
     var vm = this;
 
     vm.authentication = Authentication;
@@ -22,7 +22,6 @@
     $scope.nLin = 0;
 
     $scope.matrix = new DecisionsService();
-    $scope.matrix.theta = 1;
 
     $scope.listValues = ValuesService.query();
 
@@ -44,13 +43,8 @@
 
       var i;
 
-      console.log($scope.listValues);
-
       $scope.matrix.nAlt = $scope.nLin;
       $scope.matrix.nCrit = $scope.nCol;
-
-      console.log($scope.matrix.nAlt);
-      console.log($scope.matrix.nCrit);
 
       $scope.matrix.criteria = [];
       $scope.matrix.alternatives = [];
@@ -79,7 +73,6 @@
 
     $scope.inputMethod = function () {
       if($scope.methodInput.method !== ''){
-        console.log($scope.methodInput);
         var aux = {};
         aux.method = $scope.methodInput.method;
         aux.theta = $scope.methodInput.theta;
@@ -87,43 +80,66 @@
       }
     };
 
+    $scope.openTunning = function (inType, inValue) {
+
+      var modalInstance = $uibModal.open({
+        animation: true,
+        templateUrl: 'myModalContent.html',
+        controller: 'ModalTunningController',
+        size: 'lg',
+        resolve: {
+          type: function(){
+            return inType;
+          },
+          value: function(){
+            return inValue;
+          }
+        }
+      });
+
+      modalInstance.result.then(function (updatedValue) {
+        inValue = updatedValue;
+      });
+    };
+
     $scope.submitTable = function() {
 
-      var i;
+      var i, j;
 
       console.log($scope.matrix);
       var old = new DecisionsService($scope.matrix);
       $scope.matrix.$save(function (response) {
-        $scope.res = response;
-        // $scope.sortRes = $scope.res.closeness;
-        // $scope.sortRes.sort(
-        //     function(a, b) {
-        //       return a.coefficient - b.coefficient;
-        //     }
-        // );
+        $scope.res = response.results;
+
         console.log('aki');
         $scope.labels = [];
         $scope.series = [];
         $scope.coefficients = [];
-        if($scope.res.methodOptions.topsis){
-          $scope.series.push('TOPSIS');
-          $scope.coefficients.push([]);
-          for(i = 0; i < $scope.res.closenessTopsis.length; i++){
-            console.log($scope.res.closenessTopsis[i]);
-            $scope.labels.push($scope.res.closenessTopsis[i].name);
-            $scope.coefficients[0].push($scope.res.closenessTopsis[i].coefficient);
-          }
-        }
-        if($scope.res.methodOptions.todim){
-          $scope.series.push('TODIM');
-          $scope.coefficients.push([]);
-          $scope.labels = [];
-          for(i = 0; i < $scope.res.closenessTodim.length; i++){
-            console.log($scope.res.closenessTodim[i]);
-            $scope.labels.push($scope.res.closenessTodim[i].name);
-            $scope.coefficients[$scope.coefficients.length - 1].push($scope.res.closenessTodim[i].coefficient);
-          }
-        }
+
+
+        // for(j = 0; j < $scope.res.length; j++){
+        //
+        // }
+        //
+        // if($scope.res.methodOptions.topsis){
+        //   $scope.series.push('TOPSIS');
+        //   $scope.coefficients.push([]);
+        //   for(i = 0; i < $scope.res.closenessTopsis.length; i++){
+        //     console.log($scope.res.closenessTopsis[i]);
+        //     $scope.labels.push($scope.res.closenessTopsis[i].name);
+        //     $scope.coefficients[0].push($scope.res.closenessTopsis[i].coefficient);
+        //   }
+        // }
+        // if($scope.res.methodOptions.todim){
+        //   $scope.series.push('TODIM');
+        //   $scope.coefficients.push([]);
+        //   $scope.labels = [];
+        //   for(i = 0; i < $scope.res.closenessTodim.length; i++){
+        //     console.log($scope.res.closenessTodim[i]);
+        //     $scope.labels.push($scope.res.closenessTodim[i].name);
+        //     $scope.coefficients[$scope.coefficients.length - 1].push($scope.res.closenessTodim[i].coefficient);
+        //   }
+        // }
         $scope.matrix = old;
         //console.log($scope.old);
         console.log(response);

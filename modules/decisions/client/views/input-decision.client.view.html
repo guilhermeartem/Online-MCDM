@@ -36,6 +36,11 @@
         </div>
         <button class="btn btn-default" ng-click="inputMethod()">Ok</button>
       </div>
+      <h3>Resgistered methods</h3>
+      <div class="row" ng-repeat="option in matrix.methodOptions">
+        <div class="col-md-2">{{option.method}}</div>
+        <div class="col-md-2" ng-show="option.method=='todim'">Theta: {{option.theta}}</div>
+      </div>
     </div>
 
 
@@ -81,7 +86,7 @@
       <h2>Tunning Matrix</h2>
       <div class="form-inline" ng-repeat="line in matrix.evaluation">
         <div class="row">
-          <button class="btn btn-default col-sm-1" ng-repeat="col in line track by $index" ng-model="line[$index]">{{line[$index]}}
+          <button class="btn btn-default col-sm-1" ng-repeat="col in line track by $index" ng-click="openTunning(matrix.criteria[$index],line[$index])">{{line[$index]}}
           </button>
         </div>
       </div>
@@ -114,4 +119,81 @@
       <pre>{{ res | json }}</pre>
     <!--</form>-->
   </div>
+
+  <script type="text/ng-template" id="myModalContent.html">
+    <div class="modal-header">
+      <h3 class="modal-title">Tunning value</h3>
+    </div>
+    <div class="modal-body">
+      <h2>{{type.type}}</h2>
+      <h2>{{value}}</h2>
+
+      <div class="row" ng-click="clickCrispSlider()">
+        <multi-slider name="crispSlider"
+                      floor="0"
+                      step="0.01"
+                      ceiling="1"
+                      bubbles="true"
+                      ng-model="crispSlider"
+                      style="margin-top:120px"
+                      control="ctrlCrispSlider"
+                      ng-show="type.type == 'crisp'"
+                      ng-click="clickCrispSlider()">
+        </multi-slider>
+      </div>
+
+      <div class="row" ng-click="clickIntervalSlider()">
+        <multi-slider name="intervalSlider"
+                      floor="0"
+                      step="0.01"
+                      ceiling="1"
+                      bubbles="true"
+                      ng-model="intervalSlider"
+                      style="margin-top:120px"
+                      control="ctrlIntervalSlider"
+                      ng-show="type.type == 'interval'"
+                      ng-click="clickIntervalSlider()">
+        </multi-slider>
+      </div>
+
+      <c3chart ng-show="type.type == 'z-number' || type.type == 'fuzzy'" bindto-id="fuzzyGraph" chart-data="linePoints" chart-columns="lineColumns" chart-x="datax"></c3chart>
+
+      <!--<div class="row" ng-click="clickFuzzySlider()">-->
+        <multi-slider name="fuzzySlider"
+                      floor="0"
+                      step="0.01"
+                      ceiling="1"
+                      bubbles="true"
+                      ng-model="fuzzySlider"
+                      style="margin-top:120px"
+                      control="ctrlFuzzySlider"
+                      ng-show="type.type == 'fuzzy' || type.type == 'z-number'"
+                      ng-click="clickFuzzySlider()">
+        </multi-slider>
+      <!--</div>-->
+
+      <c3chart ng-show="type.type == 'z-number'" bindto-id="zGraph" chart-data="linePointsZ" chart-columns="lineColumnsZ" chart-x="datax"></c3chart>
+
+      <div class="row" ng-click="clickZrelSlider()">
+        <multi-slider name="ZrelSlider"
+                      floor="0"
+                      step="0.01"
+                      ceiling="1"
+                      bubbles="true"
+                      ng-model="ZrelSlider"
+                      style="margin-top:120px"
+                      control="ctrlZrelSlider"
+                      ng-show="type.type == 'z-number'"
+                      ng-click="clickZrelSlider()">
+        </multi-slider>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
+      <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+    </div>
+  </script>
+
 </section>
+
+

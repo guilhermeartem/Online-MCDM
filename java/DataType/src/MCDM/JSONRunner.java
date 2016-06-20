@@ -7,7 +7,8 @@ import DataType.*;
 public class JSONRunner {
 	public static String run(String strJSON){
 		JSONObject mat = new JSONObject(strJSON);
-		JSONObject result = new JSONObject();
+		JSONArray result = new JSONArray();
+		JSONArray methods = new JSONArray();
 		JSONArray closenessTopsis = new JSONArray();
 		JSONArray closenessTodim = new JSONArray();
 		JSONArray criteria = mat.getJSONArray("criteria");
@@ -15,9 +16,8 @@ public class JSONRunner {
 		int[] benefit = new int[criteria.length()];
 		DataEntry[][] DM = new DataEntry[mat.getInt("nAlt")][mat.getInt("nCrit")];
 		double[] CCTopsis, CCTodim;
-		double theta = mat.getDouble("theta");
 		
-		result.put("methodOptions", mat.getJSONObject("methodOptions"));
+		methods = mat.getJSONArray("methodOptions");
 		
 		for(int i = 0; i < criteria.length(); i++){
 			weights[i] = criteria.getJSONObject(i).getDouble("weight");
@@ -68,33 +68,58 @@ public class JSONRunner {
 	    
 	    DataEntry.Normalize(DM, false);
 	    
-	    if(mat.getJSONObject("methodOptions").getBoolean("topsis")){
-	    	
-	    	CCTopsis = TOPSIS.Modular(DM,weights,benefit,false);
-			
-			for(int i = 0; i < mat.getInt("nAlt"); i++){
-				closenessTopsis.put(new JSONObject().put("name", mat.getJSONArray("alternatives").getJSONObject(i).getString("name")).
-						put("coefficient", CCTopsis[i]));
-			}
-			
-			result.put("closenessTopsis", closenessTopsis);
-	    	
+	    for(int j = 0; j < methods.length(); j++){
+	    	if(methods.getJSONObject(j).getString("method").compareTo("topsis") == 0){
+	    		CCTopsis = TOPSIS.Modular(DM,weights,benefit,false);
+				closenessTopsis = new JSONArray();
+				for(int i = 0; i < mat.getInt("nAlt"); i++){
+					closenessTopsis.put(new JSONObject().put("name", mat.getJSONArray("alternatives").getJSONObject(i).getString("name")).
+							put("coefficient", CCTopsis[i]));
+				}
+				
+				result.put(new JSONObject().put("method", "topsis").put("closeness", closenessTopsis));
+				
+	    	} else if(methods.getJSONObject(j).getString("method").compareTo("todim") == 0){
+	    		
+	    		CCTodim = TODIM.Modular(DM,weights,methods.getJSONObject(j).optDouble("theta"), benefit,false);
+	    		closenessTodim = new JSONArray();
+				for(int i = 0; i < mat.getInt("nAlt"); i++){
+					closenessTodim.put(new JSONObject().put("name", mat.getJSONArray("alternatives").getJSONObject(i).getString("name")).
+							put("coefficient", CCTodim[i]));
+				}
+				
+				result.put(new JSONObject().put("method", "todim").put("theta", methods.getJSONObject(j).optDouble("theta")).put("closeness", closenessTodim));
+				
+	    	}
 	    }
 	    
-	    if(mat.getJSONObject("methodOptions").getBoolean("todim")){
-	    	
-	    	CCTodim = TODIM.Modular(DM,weights,theta, benefit,false);
-			
-			for(int i = 0; i < mat.getInt("nAlt"); i++){
-				closenessTodim.put(new JSONObject().put("name", mat.getJSONArray("alternatives").getJSONObject(i).getString("name")).
-						put("coefficient", CCTodim[i]));
-			}
-			
-			result.put("closenessTodim", closenessTodim);
-	    	
-	    }
-		
-		return result.toString();		
+//	    if(mat.getJSONObject("methodOptions").getBoolean("topsis")){
+//	    	
+//	    	CCTopsis = TOPSIS.Modular(DM,weights,benefit,false);
+//			
+//			for(int i = 0; i < mat.getInt("nAlt"); i++){
+//				closenessTopsis.put(new JSONObject().put("name", mat.getJSONArray("alternatives").getJSONObject(i).getString("name")).
+//						put("coefficient", CCTopsis[i]));
+//			}
+//			
+//			result.put("closenessTopsis", closenessTopsis);
+//	    	
+//	    }
+//	    
+//	    if(mat.getJSONObject("methodOptions").getBoolean("todim")){
+//	    	
+//	    	CCTodim = TODIM.Modular(DM,weights,theta, benefit,false);
+//			
+//			for(int i = 0; i < mat.getInt("nAlt"); i++){
+//				closenessTodim.put(new JSONObject().put("name", mat.getJSONArray("alternatives").getJSONObject(i).getString("name")).
+//						put("coefficient", CCTodim[i]));
+//			}
+//			
+//			result.put("closenessTodim", closenessTodim);
+//	    	
+//	    }
+//		
+		return new JSONObject().put("results", result).toString();		
 		
 	}
 }

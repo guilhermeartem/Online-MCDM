@@ -38,9 +38,9 @@
     ];
 
     vm.ZrelSlider= [
-      {value: $scope.value.value[0], title: 'Left Value = ', component: 'Left'},
-      {value: $scope.value.value[1], title: 'Center Value = ', component: 'Center'},
-      {value: $scope.value.value[2], title: 'Right Value = ', component: 'Right'}
+      {value: $scope.value.value[3], title: 'Left Value = ', component: 'Left'},
+      {value: $scope.value.value[4], title: 'Center Value = ', component: 'Center'},
+      {value: $scope.value.value[5], title: 'Right Value = ', component: 'Right'}
     ];
 
     vm.error = null;
