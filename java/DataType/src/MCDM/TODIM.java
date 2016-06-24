@@ -32,7 +32,7 @@ public final class TODIM{
 				
 				    delta[i][j] += phi[c][i][j];
 				    if (printPhi)
-                        System.out.printf("%6.2f", phi[c][i][j]);
+                        System.out.printf("aki %6.2f", phi[c][i][j]);
 			    }
 			    if (printPhi)
 				    System.out.println();
@@ -47,11 +47,14 @@ public final class TODIM{
 	
 	    double minEpsilon = epsilon[0], maxEpsilon = epsilon[0];
 
+	    System.out.println("aki");
+	    
         for (int i = 0; i < DM.length; i++){
 		    if (epsilon[i] > maxEpsilon)
 			    maxEpsilon = epsilon[i];
 		    else if ( epsilon[i] < minEpsilon)
 			    minEpsilon = epsilon[i];
+		    System.out.printf("A{%d}      %6.2f\n", i + 1, epsilon[i]);
 	    }
 
         for (int i = 0; i < DM.length; i++)
@@ -118,7 +121,12 @@ public final class TODIM{
 			    maxEpsilon = epsilon[i];
 		    else if ( epsilon[i] < minEpsilon)
 			    minEpsilon = epsilon[i];
+		    
+		    System.out.printf("A_%d      %6.2f\n", i + 1, epsilon[i]);
 	    }
+        
+        System.out.println("minEpsilon: " + minEpsilon);
+ 	   System.out.println("maxEpsilon: " + maxEpsilon);
 
         for (int i = 0; i < DM.length; i++)
 		    epsilon[i] = (epsilon[i]-minEpsilon)/(maxEpsilon - minEpsilon);

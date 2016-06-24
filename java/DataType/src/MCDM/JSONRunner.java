@@ -81,7 +81,7 @@ public class JSONRunner {
 				
 	    	} else if(methods.getJSONObject(j).getString("method").compareTo("todim") == 0){
 	    		
-	    		CCTodim = TODIM.Modular(DM,weights,methods.getJSONObject(j).optDouble("theta"), benefit,false);
+	    		CCTodim = TODIM.Modular(DM,weights,methods.getJSONObject(j).optDouble("theta"), benefit,true);
 	    		closenessTodim = new JSONArray();
 				for(int i = 0; i < mat.getInt("nAlt"); i++){
 					closenessTodim.put(new JSONObject().put("name", mat.getJSONArray("alternatives").getJSONObject(i).getString("name")).
