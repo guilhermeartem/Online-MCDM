@@ -8,21 +8,36 @@
       <fieldset>
         <div class="form-group" show-errors>
           <label class="control-label" for="name">Name</label>
-          <input name="name" type="text" ng-model="value.name" id="name" class="form-control" placeholder="Name" required>
+          <input name="name" ng-disabled="state == 1" type="text" ng-model="value.name" id="name" class="form-control" placeholder="Name" required>
           <div ng-messages="vm.form.valueForm.name.$error" role="alert">
             <p class="help-block error-text" ng-message="required">Value name is required.</p>
           </div>
         </div>
+
         <div class="form-group" show-errors>
           <label class="control-label" for="abbreviation">Abbreviation</label>
-          <input name="abbreviation" type="text" ng-model="value.abbreviation" id="abbreviation" class="form-control" placeholder="Abbreviation" required>
+          <input ng-disabled="state == 1" name="abbreviation" type="text" ng-model="value.abbreviation" id="abbreviation" class="form-control" placeholder="Abbreviation" required>
           <div ng-messages="vm.form.valueForm.abbreviation.$error" role="alert">
             <p class="help-block error-text" ng-message="required">Value abbreviation is required.</p>
           </div>
         </div>
+
+        <div class="form-group form-inline" show-errors>
+          <label class="control-label" for="min">Minimum value</label>
+          <input ng-disabled="state == 1" name="min" id="min" ng-model="value.minValue" type="number" class="form-control" placeholder="Minimum value">
+          <label class="control-label" for="max">Maximum value</label>
+          <input ng-disabled="state == 1" name="max" id="max" ng-model="value.maxValue" type="number" class="form-control" placeholder="Maximum value">
+          <div ng-messages="vm.form.valueForm.min.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">Minimum value is required.</p>
+          </div>
+          <div ng-messages="vm.form.valueForm.max.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">Maximum value is required.</p>
+          </div>
+        </div>
+
         <div class="form-group" show-errors>
           <label class="control-label" for="type">Type</label>
-          <select name="type" id="type" ng-model="value.type">
+          <select ng-disabled="state == 1" name="type" id="type" ng-model="value.type">
             <option ng-repeat="option in vm.valueOptions" value="{{option.name}}">{{option.showName}}</option>
           </select>
           <div ng-messages="vm.form.valueForm.type.$error" role="alert">
@@ -30,84 +45,116 @@
           </div>
         </div>
 
-        <div class="form-group" ng-show="value.type == 'crisp'">
+        <div class="form-group" ng-show="state == 0">
+          <button type="button" class="btn btn-default" ng-click="inputValues()">Input values</button>
+        </div>
+
+        <div class="form-group" ng-show="value.type == 'crisp' && state === 1">
           <label class="control-label">Input Crisp Value</label>
         </div>
 
+        <div class="form-group" ng-show="value.type == 'crisp' && state === 1">
+          <label class="control-label">Enter value manually</label>
+          <div class="form-inline">
+            <input ng-model="value.value[0]" type="number" class="form-control">
+            <button type="button" class="btn btn-default" ng-click="okInputManual('crisp')">Ok</button>
+          </div>
+        </div>
+
+
         <div class="row" ng-click="clickCrispSlider()">
           <multi-slider name="crispSlider"
-                        floor="0"
+                        floor="{{value.minValue}}"
                         step="0.01"
-                        ceiling="1"
+                        ceiling="{{value.maxValue}}"
                         bubbles="true"
                         ng-model="vm.crispSlider"
                         style="margin-top:120px"
                         control="ctrlCrispSlider"
-                        ng-show="value.type == 'crisp'"
+                        ng-show="value.type == 'crisp' && state === 1"
                         ng-click="clickCrispSlider()">
           </multi-slider>
         </div>
 
-        <div class="form-group" ng-show="value.type == 'interval'">
+        <div class="form-group" ng-show="value.type == 'interval' && state === 1">
           <label class="control-label">Input Interval Values</label>
+        </div>
+
+        <div class="form-group" ng-show="value.type == 'interval' && state === 1">
+          <label class="control-label">Enter values manually</label>
+          <div class="form-inline">
+            <input ng-model="value.value[0]" type="number" class="form-control">
+            <input ng-model="value.value[1]" type="number" class="form-control">
+            <button type="button" class="btn btn-default" ng-click="okInputManual('interval')">Ok</button>
+          </div>
         </div>
 
         <div class="row" ng-click="clickIntervalSlider()">
           <multi-slider name="intervalSlider"
-                        floor="0"
-                        step="0.01"
-                        ceiling="1"
+                        floor="{{value.minValue}}"
+                        step="0.0001"
+                        ceiling="{{value.maxValue}}"
                         bubbles="true"
                         ng-model="vm.intervalSlider"
                         style="margin-top:120px"
                         control="ctrlIntervalSlider"
-                        ng-show="value.type == 'interval'"
+                        ng-show="value.type == 'interval' && state === 1"
                         ng-click="clickIntervalSlider()">
           </multi-slider>
         </div>
 
-        <div class="form-group"  ng-show="value.type == 'fuzzy'">
+        <div class="form-group"  ng-show="value.type == 'fuzzy' && state === 1">
           <label class="control-label">Input Fuzzy-Values</label>
         </div>
 
-        <div class="form-group" ng-show="value.type == 'z-number'">
+        <div class="form-group" ng-show="value.type == 'z-number' && state === 1">
           <label class="control-label">Input Z-Number Values</label>
         </div>
 
-        <c3chart ng-show="value.type == 'z-number' || value.type == 'fuzzy'" bindto-id="fuzzyGraph" chart-data="linePoints" chart-columns="lineColumns" chart-x="datax"></c3chart>
+        <div class="form-group" ng-show="(value.type == 'fuzzy' || value.type == 'z-number') && state == 1">
+          <label class="control-label">Enter values manually</label>
+          <div class="form-inline">
+            <input ng-model="value.value[0]" type="number" class="form-control">
+            <input ng-model="value.value[1]" type="number" class="form-control">
+            <input ng-model="value.value[2]" type="number" class="form-control">
+            <button type="button" class="btn btn-default" ng-click="okInputManual('fuzzy')">Ok</button>
+          </div>
+        </div>
+
+        <c3chart ng-show="(value.type == 'z-number' || value.type == 'fuzzy') && state == 1" bindto-id="fuzzyGraph" chart-data="linePoints" chart-columns="lineColumns" chart-x="datax"></c3chart>
 
         <div class="row" ng-click="clickFuzzySlider()">
           <multi-slider name="fuzzySlider"
-                        floor="0"
-                        step="0.01"
-                        ceiling="1"
+                        floor="{{value.minValue}}"
+                        step="0.0001"
+                        ceiling="{{value.maxValue}}"
                         bubbles="true"
                         ng-model="vm.fuzzySlider"
                         style="margin-top:120px"
                         control="ctrlFuzzySlider"
-                        ng-show="value.type == 'fuzzy' || value.type == 'z-number'"
+                        ng-show="(value.type == 'fuzzy' || value.type == 'z-number') && state == 1"
                         ng-click="clickFuzzySlider()">
           </multi-slider>
         </div>
 
-        <c3chart ng-show="value.type == 'z-number'" bindto-id="zGraph" chart-data="linePointsZ" chart-columns="lineColumnsZ" chart-x="datax"></c3chart>
+        <c3chart ng-show="value.type == 'z-number' && state == 1" bindto-id="zGraph" chart-data="linePointsZ" chart-columns="lineColumnsZ" chart-x="datax"></c3chart>
 
         <div class="row" ng-click="clickZrelSlider()">
           <multi-slider name="ZrelSlider"
-                        floor="0"
-                        step="0.01"
-                        ceiling="1"
+                        floor="{{value.minValue}}"
+                        step="0.0001"
+                        ceiling="{{value.maxValue}}"
                         bubbles="true"
                         ng-model="vm.ZrelSlider"
                         style="margin-top:120px"
                         control="ctrlZrelSlider"
-                        ng-show="value.type == 'z-number'"
+                        ng-show="value.type == 'z-number' && state == 1"
                         ng-click="clickZrelSlider()">
           </multi-slider>
         </div>
 
 
-        <div class="form-group">
+        <div class="form-group" ng-show="state === 1">
           <button type="submit" class="btn btn-default">{{value._id ? 'Update' : 'Create'}}</button>
         </div>
 

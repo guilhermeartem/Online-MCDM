@@ -66,7 +66,7 @@ public class JSONRunner {
 //	    }
 //	    System.out.printf("\n\n"); 
 	    
-	    DataEntry.Normalize(DM, false);
+	    DataEntry.Normalize(DM, benefit, false);
 	    
 	    for(int j = 0; j < methods.length(); j++){
 	    	if(methods.getJSONObject(j).getString("method").compareTo("topsis") == 0){

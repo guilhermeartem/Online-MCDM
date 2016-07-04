@@ -6,15 +6,20 @@
     .module('values')
     .controller('ValuesController', ValuesController);
 
-  ValuesController.$inject = ['$scope', '$state', 'Authentication', 'valueResolve'];
+  ValuesController.$inject = ['$scope', '$state', '$timeout', 'Authentication', 'valueResolve'];
 
-  function ValuesController ($scope, $state, Authentication, value) {
+  function ValuesController ($scope, $state, $timeout, Authentication, value) {
     var vm = this;
 
     vm.authentication = Authentication;
+
+    $scope.state = 0;
+
     $scope.value = value;
     if(!$scope.value._id){
       $scope.value.value = [0,0,0,0,0,0];
+      $scope.value.minValue = 0;
+      $scope.value.maxValue = 1;
     }
 
     $scope.ctrlCrispSlider = {};
@@ -75,7 +80,7 @@
 
     $scope.clickCrispSlider = function(){
       $scope.value.value[0] = vm.crispSlider[0].value;
-      $scope.ctrlIntervalSlider.updateSlider();
+      $scope.ctrlCrispSlider.updateSlider();
     };
 
     $scope.clickIntervalSlider = function(){
@@ -120,6 +125,50 @@
         {value: $scope.value.value[1], title: 'Center Value = ', component: 'Center'},
         {value: $scope.value.value[2], title: 'Right Value = ', component: 'Right'}
       ];
+    };
+
+    $scope.okInputManual = function (type) {
+      if(type === 'crisp'){
+        vm.crispSlider[0].value = $scope.value.value[0];
+        $scope.ctrlCrispSlider.updateSlider();
+      }
+      if(type === 'interval'){
+        vm.intervalSlider[0].value = $scope.value.value[0];
+        vm.intervalSlider[1].value = $scope.value.value[1];
+        $scope.ctrlIntervalSlider.updateSlider();
+      }
+      if(type === 'fuzzy'){
+        vm.fuzzySlider[0].value = $scope.value.value[0];
+        vm.fuzzySlider[1].value = $scope.value.value[1];
+        vm.fuzzySlider[2].value = $scope.value.value[2];
+        $scope.ctrlFuzzySlider.updateSlider();
+      }
+    };
+
+    $scope.inputValues = function () {
+      $scope.value.value[0] = $scope.value.value[1] = $scope.value.value[2] = $scope.value.value[3] = $scope.value.value[4] = $scope.value.value[5] = ($scope.value.minValue + $scope.value.maxValue) / 2;
+      vm.crispSlider = [
+        {value: $scope.value.value[0], title: 'Value = ', component: 'value'}
+      ];
+
+      vm.intervalSlider = [
+        {value: $scope.value.value[0], title: 'Left Value = ', component: 'Left'},
+        {value: $scope.value.value[1], title: 'Right Value = ', component: 'Right'}
+      ];
+
+      vm.fuzzySlider = [
+        {value: $scope.value.value[0], title: 'Left Value = ', component: 'Left'},
+        {value: $scope.value.value[1], title: 'Center Value = ', component: 'Center'},
+        {value: $scope.value.value[2], title: 'Right Value = ', component: 'Right'}
+      ];
+
+      vm.ZrelSlider= [
+        {value: $scope.value.value[3], title: 'Left Value = ', component: 'Left'},
+        {value: $scope.value.value[4], title: 'Center Value = ', component: 'Center'},
+        {value: $scope.value.value[5], title: 'Right Value = ', component: 'Right'}
+      ];
+      console.log($scope.value.value);
+      $timeout(function () {$scope.state = 1;console.log("timeout");},20);
     };
 
     $scope.testButton = function(){

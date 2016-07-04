@@ -29,7 +29,7 @@ public class ProgramModular{
 		double[] w = {0.7,0.3};
 		int[] benefit = {1,0};
 //		double theta = 0.4;
-		DataEntry.Normalize(DM, true);
+		DataEntry.Normalize(DM, benefit, true);
 		
 		TOPSIS.Modular(DM,w,benefit,true);
 //		TODIM.Modular(DM, w, theta, benefit, true);
@@ -96,7 +96,7 @@ public class ProgramModular{
 		double[] w = {0.4,0.3,0.3};
 		int[] benefit = {0,0,1};
 		double theta = 0.4;
-		DataEntry.Normalize(DM, true);
+		DataEntry.Normalize(DM, benefit, true);
 		
 		TOPSIS.Modular(DM,w,benefit,true);
 		TODIM.Modular(DM, w, theta, benefit, true);

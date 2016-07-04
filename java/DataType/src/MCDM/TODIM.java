@@ -95,9 +95,9 @@ public final class TODIM{
 		    for (int i=0; i < DM.length; i++ ){
                 for (int j = 0; j < DM.length; j++){
 				    if (DM[i][c].compareTo(DM[j][c]) >= 0)
-					    phi[c][i][j] = Math.pow( w[c] * DM[i][c].Distance(DM[j][c]), 0.5 )/Math.pow(-theta, (1-benefit[c]));
+					    phi[c][i][j] = Math.pow( w[c] * DM[i][c].Distance(DM[j][c]), 0.5 );
 				    else
-					    phi[c][i][j] = Math.pow( w[c] * DM[j][c].Distance(DM[i][c]), 0.5 )/Math.pow(-theta, (benefit[c]) );
+					    phi[c][i][j] = Math.pow( w[c] * DM[j][c].Distance(DM[i][c]), 0.5 )/(-theta);
 				
 				    delta[i][j] += phi[c][i][j];
 				    if (printPhi)
@@ -122,7 +122,7 @@ public final class TODIM{
 		    else if ( epsilon[i] < minEpsilon)
 			    minEpsilon = epsilon[i];
 		    
-		    System.out.printf("A_%d      %6.2f\n", i + 1, epsilon[i]);
+//		    System.out.printf("A_%d      %6.2f\n", i + 1, epsilon[i]);
 	    }
         
         System.out.println("minEpsilon: " + minEpsilon);
@@ -138,5 +138,65 @@ public final class TODIM{
 	    return epsilon;
 
     }
+    
+//    public static double[] Modular(DataEntry[][] DM, double[] w, double theta, int[] benefit, Boolean printPhi)
+//    {
+//
+//	    double[][][] phi = new double[DM[0].length][DM.length][DM.length];
+//	    double[][] delta = new double[DM.length][DM.length];
+//	    double[] epsilon = new double[DM.length]; 
+//
+//	    if (printPhi)
+//		    System.out.println("Partial dominance matrices: ");
+//	    
+//	    for (int c=0; c < DM[0].length; c++ ){
+//		    if (printPhi)
+//			    System.out.printf("Phi[%d]: \n",c);
+//		    for (int i=0; i < DM.length; i++ ){
+//                for (int j = 0; j < DM.length; j++){
+//				    if (DM[i][c].compareTo(DM[j][c]) >= 0)
+//					    phi[c][i][j] = Math.pow( w[c] * DM[i][c].Distance(DM[j][c]), 0.5 )/Math.pow(-theta, (1-benefit[c]));
+//				    else
+//					    phi[c][i][j] = Math.pow( w[c] * DM[j][c].Distance(DM[i][c]), 0.5 )/Math.pow(-theta, (benefit[c]) );
+//				
+//				    delta[i][j] += phi[c][i][j];
+//				    if (printPhi)
+//                        System.out.printf("%6.2f", phi[c][i][j]);
+//			    }
+//			    if (printPhi)
+//				    System.out.println();
+//		    }
+//		    if (printPhi)
+//			    System.out.println();
+//	    }
+//	
+//	    for (int i=0; i < DM.length; i++)
+//            for (int j = 0; j < DM.length; j++)
+//			    epsilon[i] += delta[i][j];
+//	
+//	    double minEpsilon = epsilon[0], maxEpsilon = epsilon[0];
+//
+//        for (int i = 0; i < DM.length; i++){
+//		    if (epsilon[i] > maxEpsilon)
+//			    maxEpsilon = epsilon[i];
+//		    else if ( epsilon[i] < minEpsilon)
+//			    minEpsilon = epsilon[i];
+//		    
+////		    System.out.printf("A_%d      %6.2f\n", i + 1, epsilon[i]);
+//	    }
+//        
+//        System.out.println("minEpsilon: " + minEpsilon);
+// 	   System.out.println("maxEpsilon: " + maxEpsilon);
+//
+//        for (int i = 0; i < DM.length; i++)
+//		    epsilon[i] = (epsilon[i]-minEpsilon)/(maxEpsilon - minEpsilon);
+//        
+//        System.out.printf("Final epsilons:\n");
+//        for (int i = 0; i < DM.length; i++)
+//            System.out.printf("A_%d      %6.2f\n", i + 1, epsilon[i]);
+//	
+//	    return epsilon;
+//
+//    }
 
 }

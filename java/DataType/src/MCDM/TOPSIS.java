@@ -26,18 +26,10 @@ public class TOPSIS{
 			PIS[c] = DM[0][c];
 			NIS[c] = DM[0][c];
 			for (int i=1; i<DM.length; i++){
-				if (benefit[c]>0){
-					if(DM[i][c].compareTo(PIS[c])>=0)
-						PIS[c] = DM[i][c];
-					else if(DM[i][c].compareTo(NIS[c])<=0)
-						NIS[c] = DM[i][c];
-				}
-				else if (benefit[c]==0){
-					if(DM[i][c].compareTo(PIS[c])<=0)
-						PIS[c] = DM[i][c];
-					else if(DM[i][c].compareTo(NIS[c])>=0)
-						NIS[c] = DM[i][c];
-				}
+				if(DM[i][c].compareTo(PIS[c])>=0)
+					PIS[c] = DM[i][c];
+				else if(DM[i][c].compareTo(NIS[c])<=0)
+					NIS[c] = DM[i][c];
 			}//end internal for
 		}//end external for
 		

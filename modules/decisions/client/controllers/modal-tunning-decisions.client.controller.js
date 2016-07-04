@@ -82,6 +82,24 @@ angular.module('decisions').controller('ModalTunningController', function ($scop
         $scope.linePointsZ = [{"x":0,"data1":0}, {"x":$scope.value[3],"data1":0},{"x":$scope.value[4],"data1":1},{"x":$scope.value[5],"data1":0}, {"x":1,"data1":0}];
     };
 
+    $scope.okInputManual = function (type) {
+        if(type === 'crisp'){
+            $scope.crispSlider[0].value = $scope.value[0];
+            $scope.ctrlCrispSlider.updateSlider();
+        }
+        if(type === 'interval'){
+            $scope.intervalSlider[0].value = $scope.value[0];
+            $scope.intervalSlider[1].value = $scope.value[1];
+            $scope.ctrlIntervalSlider.updateSlider();
+        }
+        if(type === 'fuzzy'){
+            $scope.fuzzySlider[0].value = $scope.value[0];
+            $scope.fuzzySlider[1].value = $scope.value[1];
+            $scope.fuzzySlider[2].value = $scope.value[2];
+            $scope.ctrlFuzzySlider.updateSlider();
+        }
+    };
+
     $scope.ok = function () {
         $uibModalInstance.close($scope.value);
     };

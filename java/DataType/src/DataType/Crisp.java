@@ -26,9 +26,14 @@ public class Crisp extends DataEntry
      * @param max The supremum value to be used to normalize the data parameters.
      */
     @Override 
-    public void NormalizeDataEntry(double max)
+    public void NormalizeDataEntry(double min, double max, int benefit)
     {
-        value = value / max;
+    	if(benefit == 1){
+    		value = (value - min)/(max - min);
+    	} else {
+    		value = (max - value)/(max - min);
+    	}
+        
     }
 
     /***
@@ -36,6 +41,15 @@ public class Crisp extends DataEntry
      */
     @Override
     public double GetMax()
+    {
+        return value;
+    }
+    
+    /***
+     * Return the field value.
+     */
+    @Override
+    public double GetMin()
     {
         return value;
     }

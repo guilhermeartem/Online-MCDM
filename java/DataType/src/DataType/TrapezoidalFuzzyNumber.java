@@ -67,9 +67,14 @@ public class TrapezoidalFuzzyNumber extends DataEntry
      * @see NormalizeDateEntry.
      */
     @Override
-    public void NormalizeDataEntry(double max)
+    public void NormalizeDataEntry(double min, double max, int benefit)
     {
-        SetAllParameters(a[0]/max,a[1]/max,a[2]/max,a[3]/max);
+    	if(benefit == 1){
+    		SetAllParameters((a[0] - min)/(max - min),(a[1] - min)/(max - min),(a[2] - min)/(max - min),(a[3] - min)/(max - min));
+    	} else {
+    		SetAllParameters((max - a[3])/(max - min),(max - a[2])/(max - min),(max - a[1])/(max - min),(max - a[0])/(max - min));
+    	}
+        
     }
 
     /***
@@ -88,6 +93,15 @@ public class TrapezoidalFuzzyNumber extends DataEntry
     public double GetMax()
     {
         return a[3];
+    }
+    
+    /***
+     * Return the infimum value that belongs to the TFN caller, i.e., a[3].
+     */
+    @Override
+    public double GetMin()
+    {
+        return a[0];
     }
     
     @Override

@@ -147,15 +147,20 @@ public class TrapezoidalIntuitionisticFuzzyNumber extends DataEntry
      * @see NormalizeDataEntry.
      */
     @Override
-    public void NormalizeDataEntry(double max)
+    public void NormalizeDataEntry(double min, double max, int benefit)
     {
         double[] a, b;
         a = new double[4];
         b = new double[4];
         for (int i = 0; i < 4; i++)
         {
-            a[i] = this.a[i] / max;
-            b[i] = this.b[i] / max;
+        	if(benefit == 1){
+        		a[i] = (this.a[i] - min)/(max - min);
+        		b[i] = (this.b[i] - min)/(max - min);
+        	} else {
+        		a[3 - i] = (max - this.a[i])/(max - min);
+        		b[3 - i] = (max - this.b[i])/(max - min);
+        	}
         }
 
         SetAllParameters(a, b, this.muTilde, this.nuTilde);
@@ -172,6 +177,16 @@ public class TrapezoidalIntuitionisticFuzzyNumber extends DataEntry
     public double GetMax()
     {
         return b[3];
+    }
+    
+    /**
+     * This method return the infimum value that is possible to have
+     * a membership degree >= 0, i.e., it returns b[3].
+     */
+    @Override
+    public double GetMin()
+    {
+        return b[0];
     }
     
     /**

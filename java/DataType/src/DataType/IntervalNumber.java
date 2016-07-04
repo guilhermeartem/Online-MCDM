@@ -133,9 +133,13 @@ public class IntervalNumber extends DataEntry
      * @param max the value to be used to normalize the parameters.
      */
     @Override 
-    public void NormalizeDataEntry(double max)
+    public void NormalizeDataEntry(double min, double max, int benefit)
     {
-        SetBothInfSup(inf / max, sup / max);
+    	if(benefit == 1){
+    		SetBothInfSup((inf - min)/(max - min), (sup - min)/(max - min));
+    	} else {
+    		SetBothInfSup((max - sup)/(max - min), (max - inf)/(max - min));
+    	}
     }
 
     /***
@@ -146,6 +150,16 @@ public class IntervalNumber extends DataEntry
     {
         return sup;
     }
+    
+    /***
+     * Gets the minimum possible value of the type.
+     */
+    @Override
+    public double GetMin()
+    {
+        return inf;
+    }
+
 
     /***
      * Compare the mid point of two interval numbers to determine which one is higher.

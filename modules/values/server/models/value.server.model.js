@@ -29,8 +29,16 @@ var ValueSchema = new Schema({
     required: 'Please select value type'
   },
   value: {
-    type: [Number],
+    type: [Number]
     //required: 'Please insert the value'
+  },
+  minValue:{
+    type: Number,
+    required: 'Enter minimum value'
+  },
+  maxValue:{
+    type: Number,
+    required: 'Enter maximum value'
   },
   created: {
     type: Date,

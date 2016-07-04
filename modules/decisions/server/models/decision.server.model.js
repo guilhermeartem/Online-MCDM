@@ -13,9 +13,31 @@ var DecisionSchema = new Schema({
   name: {
     type: String,
     default: '',
-    required: 'Please fill Decision name',
     trim: true
   },
+  methodOptions:[{
+    method: {
+      type: String,
+      enum: ['topsis', 'todim']
+    },
+    theta: Number
+  }],
+  nAlt: Number,
+  nCrit: Number,
+  criteria: [{
+    name: String,
+    weight: Number,
+    benefit: Boolean,
+    type: {
+      type: String,
+      enum: ['crisp', 'interval', 'fuzzy', 'z-number']
+    }
+  }],
+  alternatives: [{
+    name: String
+  }],
+  evaluationOriginal: Schema.Types.Mixed,
+  evaluation: [],
   created: {
     type: Date,
     default: Date.now

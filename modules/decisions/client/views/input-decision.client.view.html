@@ -1,21 +1,19 @@
-<section ng-controller="DecisionsController">
+<section>
   <div class="page-header">
-    <h1>Input Matrix</h1>
+    <h1> {{vm.decision._id ? vm.decision.name : 'Input Matrix'}}</h1>
   </div>
   <div class="body">
-    <!--<form ng-controller="DecisionsController">-->
-
     <form class="form-inline" name="vm.form.formAltCrit">
       <div class="form-group">
         <label for="nLin">Alternatives:</label>
-        <input ng-disabled="state !== 0" name="nLin" id="nLin" class="form-control" type='number' min="2" max="12" ng-model='nLin' required>
+        <input ng-disabled="state !== 0" name="nLin" id="nLin" class="form-control" type='number' min="2" max="50" ng-model='nLin' required>
       </div>
       <div class="form-group">
         <label for="nCol">Criteria:</label>
         <input ng-disabled="state !== 0" name="nCol" id="nCol" class="form-control" type='number' min="1" max="12" ng-model='nCol' required>
       </div>
       <button ng-show="state === 0" class="btn btn-default" ng-click="inputDimension(vm.form.formAltCrit.nLin.$valid && vm.form.formAltCrit.nCol.$valid)">Ok</button>
-      <button ng-show="state === 1" class="btn btn-default" type='submit' ng-click="voltar()">Voltar</button>
+      <button ng-show="state === 1" class="btn btn-default" type='submit' ng-click="back()">Back</button>
     </form>
 
     <br>
@@ -26,29 +24,29 @@
       <div class="form-inline">
         <div class="form-group">
           <label for="method">Method:</label>
-          <select ng-disabled="state !== 1" id="method" ng-model="methodInput.method">
+          <select ng-disabled="(state !== 1)&&false" id="method" ng-model="methodInput.method">
             <option value="todim">TODIM</option>
             <option value="topsis">TOPSIS</option>
           </select>
         </div>
         <div class="form-group" ng-show="methodInput.method == 'todim'">
           <label for="theta">Theta:</label>
-          <input ng-disabled="state !== 1" id="theta" class="form-control" type='number' min="0.1" max="10" step="0.1" ng-model='methodInput.theta'>
+          <input ng-disabled="(state !== 1)&&false" id="theta" class="form-control" type='number' min="0.1" max="10" step="0.1" ng-model='methodInput.theta'>
         </div>
-        <button class="btn btn-default" ng-click="inputMethod()" ng-disabled="matrix.methodOptions.length >= 5 || state !== 1">Ok</button>
+        <button class="btn btn-default" ng-click="inputMethod()" ng-disabled="matrix.methodOptions.length >= 5 || (state !== 1 && false)">Ok</button>
       </div>
       <h3 ng-show="matrix.methodOptions.length > 0">Resgistered methods</h3>
       <div class="row" ng-repeat="option in matrix.methodOptions track by $index">
         <h4 class="col-md-2"><small>{{option.method}}</small></h4>
         <h4 class="col-md-2" ng-show="option.method=='todim'"><small>Theta: {{option.theta}}</small></h4>
-        <button class="col-md-1 glyphicon glyphicon-remove" ng-click="deleteMethodOption($index)" ng-disabled="state !== 1"></button>
+        <button class="col-md-1 glyphicon glyphicon-remove" ng-click="deleteMethodOption($index)" ng-disabled="(state !== 1)&&false"></button>
       </div>
     </form>
 
     <div class="form-horizontal" ng-show="state >= 1">
       <h2>Alternatives</h2>
       <div class="form-inline" ng-repeat="alternative in matrix.alternatives">
-          <input name="altName" ng-disabled="state !== 1" type="text" ng-model="alternative.name" placeholder="Alternative Name" required>
+          <input name="altName" ng-disabled="state !== 1 && false" type="text" ng-model="alternative.name" placeholder="Alternative Name" required>
       </div>
     </div>
 
@@ -61,9 +59,9 @@
         <h4 class="col-md-2">Data Type</h4>
       </div>
       <div class="form-inline row" ng-repeat="criterion in matrix.criteria">
-        <input ng-disabled="state !== 1" class="col-md-2" type="text" ng-model="criterion.name" placeholder="Criterion Name">
-        <input ng-disabled="state !== 1" class="col-md-2" type="number" step="any" ng-model="criterion.weight" max="1.0" min="0" placeholder="Criterion Weight">
-        <input ng-disabled="state !== 1" class="col-md-1" type="checkbox" data-ng-model="criterion.benefit">
+        <input ng-disabled="state !== 1 && false" class="col-md-2" type="text" ng-model="criterion.name" placeholder="Criterion Name">
+        <input ng-disabled="state !== 1 && false" class="col-md-2" type="number" step="any" ng-model="criterion.weight" max="1.0" min="0" placeholder="Criterion Weight">
+        <input ng-disabled="state !== 1 && false" class="col-md-1" type="checkbox" data-ng-model="criterion.benefit">
         <select ng-disabled="state !== 1" class="col-md-2" name="type" id="type" ng-model="criterion.type">
           <option ng-repeat="option in valueOptions" value="{{option.name}}">{{option.showName}}</option>
         </select>
@@ -75,16 +73,18 @@
     </div>
 
     <div class="form-horizontal" ng-show="state == 2">
-      <button class="btn btn-default" type='submit' ng-click="voltar()">Voltar</button>
+      <button class="btn btn-default" type='submit' ng-click="back()">Back</button>
     </div>
 
     <div class="form-horizontal" ng-show="state >= 2">
       <h2>Decision Matrix</h2>
-      <div class="form-inline" ng-repeat="line in evaluationAux">
+      <div class="form-inline" ng-repeat="line in matrix.evaluationOriginal">
         <div class="row">
           <!--<input class="col-sm-1" ng-repeat="col in line track by $index"type="number" step="any" ng-model="line[$index]">-->
-          <select ng-disabled="state !== 2" class="col-sm-1" ng-options="option as option.abbreviation for option in listValues | filter:{ type : matrix.criteria[$index].type}" ng-repeat="col in line track by $index" ng-model="line[$index]">
+          <select ng-show="state === 2" class="col-sm-1" ng-options="option as option.abbreviation for option in listValues | filter:{ type : matrix.criteria[$index].type}" ng-repeat="col in line track by $index" ng-model="line[$index]">
           </select>
+          <button ng-show="state > 2" ng-disabled="true" class="btn btn-default col-sm-1" ng-repeat="col in line track by $index">{{matrix.evaluationOriginal[$parent.$index][$index].abbreviation}}
+          </button>
         </div>
       </div>
     </div>
@@ -94,7 +94,7 @@
     </div>
 
     <div class="form-horizontal" ng-show="state == 3">
-      <button class="btn btn-default" type='submit' ng-click="voltar()">Voltar</button>
+      <button class="btn btn-default" type='submit' ng-click="back()">Back</button>
     </div>
 
     <br>
@@ -103,21 +103,32 @@
       <h2>Tunning Matrix</h2>
       <div class="form-inline" ng-repeat="line in matrix.evaluation track by $index">
         <div class="row">
-          <button class="btn btn-default col-sm-1" ng-repeat="col in line track by $index" ng-click="openTunning(matrix.criteria[$index],line[$index])">{{evaluationAux[$parent.$index][$index].abbreviation}}
-          </button>
+          <div class="col-md-1" ng-repeat="col in line track by $index">
+            <button ng-show="matrix.criteria[$index].type !== 'crisp'" class="btn btn-default" type="button"  ng-click="openTunning(matrix.evaluationOriginal[$parent.$index][$index],line[$index])">{{matrix.evaluationOriginal[$parent.$index][$index].abbreviation}}
+            </button>
+            <input ng-show="matrix.criteria[$index].type === 'crisp'"  ng-model="matrix.evaluation[$parent.$index][$index][0]" type="number" class="col-md-1 form-control">
+          </div>
         </div>
       </div>
     </div>
 
-    <div>
-      <button ng-show="state == 3" class="btn btn-default" type='submit' ng-click="submitTable()">Submit</button>
+    <br>
+
+    <div class="form-inline">
+      <button ng-show="state == 3" class="col-md-2 btn btn-default" type='submit' ng-click="submitTable()">Submit</button>
+      <button ng-show="state == 3" class="col-md-2 col-md-offset-1 btn btn-default" type='submit' ng-click="clickSave()">Save Decision</button>
     </div>
 
-    <div class="form-horizontal" ng-show="state == 4">
-      <button class="btn btn-default" type='submit' ng-click="voltar()">Voltar</button>
+    <div class="form-inline" ng-show="state == 4">
+      <input class="col-md-2" type="text" ng-model="matrix.name" placeholder="Decision Name">
+      <button class="btn btn-default" type='submit' ng-click="saveTable()">Save</button>
     </div>
 
-    <div ng-show="state >= 4">
+    <div class="form-horizontal" ng-show="state >= 4">
+      <button class="btn btn-default" type='submit' ng-click="back()">Back</button>
+    </div>
+
+    <div ng-show="state >= 5">
       <h2>Results</h2>
       <div class="row">
         <h3 class="col-md-1"><small>Alternative</small></h3>
@@ -174,11 +185,26 @@
       <h2>{{type.type}}</h2>
       <h2>{{value}}</h2>
 
+      <div class="form-group form-inline">
+        <label class="control-label" for="min">Minimum value</label>
+        <input name="min" id="min" ng-model="type.minValue" type="number" class="form-control" placeholder="Minimum value">
+        <label class="control-label" for="max">Maximum value</label>
+        <input name="max" id="max" ng-model="type.maxValue" type="number" class="form-control" placeholder="Maximum value">
+      </div>
+
+      <div class="form-group" ng-show="type.type == 'crisp'">
+        <label class="control-label">Enter value manually</label>
+        <div class="form-inline">
+          <input ng-model="value[0]" type="number" class="form-control">
+          <button type="button" class="btn btn-default" ng-click="okInputManual('crisp')">Ok</button>
+        </div>
+      </div>
+
       <div class="row" ng-click="clickCrispSlider()">
         <multi-slider name="crispSlider"
-                      floor="0"
+                      floor="{{type.minValue}}"
                       step="0.01"
-                      ceiling="1"
+                      ceiling="{{type.maxValue}}"
                       bubbles="true"
                       ng-model="crispSlider"
                       style="margin-top:120px"
@@ -188,11 +214,20 @@
         </multi-slider>
       </div>
 
+      <div class="form-group" ng-show="type.type == 'interval'">
+        <label class="control-label">Enter values manually</label>
+        <div class="form-inline">
+          <input ng-model="value[0]" type="number" class="form-control">
+          <input ng-model="value[1]" type="number" class="form-control">
+          <button type="button" class="btn btn-default" ng-click="okInputManual('interval')">Ok</button>
+        </div>
+      </div>
+
       <div class="row" ng-click="clickIntervalSlider()">
         <multi-slider name="intervalSlider"
-                      floor="0"
+                      floor="{{type.minValue}}"
                       step="0.01"
-                      ceiling="1"
+                      ceiling="{{type.maxValue}}"
                       bubbles="true"
                       ng-model="intervalSlider"
                       style="margin-top:120px"
@@ -202,13 +237,21 @@
         </multi-slider>
       </div>
 
-      <c3chart ng-show="type.type == 'z-number' || type.type == 'fuzzy'" bindto-id="fuzzyGraph" chart-data="linePoints" chart-columns="lineColumns" chart-x="datax"></c3chart>
+      <div class="form-group" ng-show="(type.type == 'fuzzy' || type.type == 'z-number') && state == 1">
+        <label class="control-label">Enter values manually</label>
+        <div class="form-inline">
+          <input ng-model="value[0]" type="number" class="form-control">
+          <input ng-model="value[1]" type="number" class="form-control">
+          <input ng-model="value[2]" type="number" class="form-control">
+          <button type="button" class="btn btn-default" ng-click="okInputManual('fuzzy')">Ok</button>
+        </div>
+      </div>
 
-      <!--<div class="row" ng-click="clickFuzzySlider()">-->
+      <div class="row" ng-click="clickFuzzySlider()">
       <multi-slider name="fuzzySlider"
-                    floor="0"
+                    floor="{{type.minValue}}"
                     step="0.01"
-                    ceiling="1"
+                    ceiling="{{type.maxValue}}"
                     bubbles="true"
                     ng-model="fuzzySlider"
                     style="margin-top:120px"
@@ -216,15 +259,17 @@
                     ng-show="type.type == 'fuzzy' || type.type == 'z-number'"
                     ng-click="clickFuzzySlider()">
       </multi-slider>
-      <!--</div>-->
+      </div>
 
-      <c3chart ng-show="type.type == 'z-number'" bindto-id="zGraph" chart-data="linePointsZ" chart-columns="lineColumnsZ" chart-x="datax"></c3chart>
+      <c3chart ng-show="type.type == 'z-number' || type.type == 'fuzzy'" bindto-id="fuzzyGraph" chart-data="linePoints" chart-columns="lineColumns" chart-x="datax"></c3chart>
+
+
 
       <div class="row" ng-click="clickZrelSlider()">
         <multi-slider name="ZrelSlider"
-                      floor="0"
+                      floor="{{type.minValue}}"
                       step="0.01"
-                      ceiling="1"
+                      ceiling="{{type.maxValue}}"
                       bubbles="true"
                       ng-model="ZrelSlider"
                       style="margin-top:120px"
@@ -234,6 +279,9 @@
         </multi-slider>
       </div>
     </div>
+
+    <c3chart ng-show="type.type == 'z-number'" bindto-id="zGraph" chart-data="linePointsZ" chart-columns="lineColumnsZ" chart-x="datax"></c3chart>
+
     <div class="modal-footer">
       <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
       <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>

@@ -22,27 +22,28 @@ exports.create = function(req, res) {
   var decision = new Decision(req.body);
   decision.user = req.user;
 
-  decision.save(function(err) {
+  var matrix = req.body;
+  var str = jsonInterface.runSync(JSON.stringify(matrix));
 
-    var matrix = req.body;
-    //console.log(matrix);
-    var str = jsonInterface.runSync(JSON.stringify(matrix));
+  var ret = JSON.parse(str);
 
-    var ret = JSON.parse(str);
-    // var ret = matrix;
+  if(matrix.saveMatrix){
+    console.log("aki");
+    decision.save(function(err) {
+      if (err) {
+        console.log(err);
+        return res.status(400).send({
+          message: errorHandler.getErrorMessage(err)
+        });
+      } else {
+        console.log(decision);
+        res.jsonp(decision);
+      }
+    });
+  } else {
     res.json(ret);
-    //res.json(matrix);
-
-    //  if (err) {
-  //    return res.status(400).send({
-  //      message: errorHandler.getErrorMessage(err)
-  //    });
-  //  } else {
-  //    res.jsonp(decision);
-  //  }
-  });
+  }
 };
-
 /**
  * Show the current Decision
  */
@@ -65,15 +66,24 @@ exports.update = function(req, res) {
 
   decision = _.extend(decision , req.body);
 
-  decision.save(function(err) {
-    if (err) {
-      return res.status(400).send({
-        message: errorHandler.getErrorMessage(err)
-      });
-    } else {
-      res.jsonp(decision);
-    }
-  });
+  var matrix = decision;
+  var str = jsonInterface.runSync(JSON.stringify(decision));
+
+  var ret = JSON.parse(str);
+
+  if(matrix.saveMatrix) {
+    decision.save(function (err) {
+      if (err) {
+        return res.status(400).send({
+          message: errorHandler.getErrorMessage(err)
+        });
+      } else {
+        res.jsonp(decision);
+      }
+    });
+  } else {
+    res.json(ret);
+  }
 };
 
 /**
